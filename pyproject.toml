@@ -1,0 +1,32 @@
+[tool.poetry]
+name = "elt-template"
+version = "0.1.0"
+description = ""
+authors = ["VeraZab <vera.zabeida@gmail.com>"]
+readme = "README.md"
+packages = [{include = "elt_template"}]
+
+[tool.poetry.dependencies]
+python = "^3.11"
+dbt-core = "^1.4.1"
+dbt-bigquery = "^1.4.1"
+pandas = "^1.5.3"
+pandas-gbq = "^0.19.1"
+prefect = "^2.7.11"
+prefect-dbt = "^0.3.0"
+prefect-gcp = "^0.2.5"
+python-dotenv = "^1.0.0"
+
+
+[tool.poetry.group.dev.dependencies]
+black = "^22.10.0"
+flake8 = "^6.0.0"
+isort = "^5.12.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[virtualenvs]
+in-project = true
+path = "venv"

@@ -1,0 +1,22 @@
+# System
+.DS__Store
+
+# Python environment
+venv
+__pycache__
+.mypy_cache
+
+# Environment variables
+.env
+
+# GCP
+gcp-credentials.json
+
+# Terraform
+.terraform
+.terraform.lock.hcl
+terraform.tfstate
+terraform.tfstate.backup
+
+# DBT
+/dbt/logs/
