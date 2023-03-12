@@ -1,0 +1,55 @@
+name: Build and Apply Flows on Manual Trigger
+
+env:
+  PREFECT_API_URL: ${{ secrets.PREFECT_API_URL }}
+  PREFECT_GITHUB_BLOCK_NAME: ${{ secrets.PREFECT_GITHUB_BLOCK_NAME }}
+  PREFECT_AGENT_QUEUE_NAME: ${{ secrets.PREFECT_AGENT_QUEUE_NAME }}
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build-and-apply-deployment:
+    name: Build and apply deployment
+
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v4
+        with:
+          python-version: "^3.11"
+
+      - name: "Set up Poetry"
+        uses: abatilo/actions-poetry@v2.1.6
+        with:
+          poetry-version: 1.2.2
+
+      - name: "Configure Poetry"
+        run: |
+          poetry config virtualenvs.in-project true
+
+      - name: "Install dependencies"
+        run: |
+          poetry install --no-root --without dev
+
+      - name: Build and apply deployment
+        run: |
+          poetry run prefect deployment build ./flows/pipeline.py:main \
+          --name "Local Prefect Orion" \
+          --version $GITHUB_SHA \
+          --work-queue $PREFECT_AGENT_QUEUE_NAME \
+          --storage-block github/$PREFECT_GITHUB_BLOCK_NAME \
+          --apply
+
+      - name: upload artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: main-deployment.yaml
+          path: main-deployment.yaml
