@@ -46,7 +46,3 @@ jobs:
           registry: "${{ inputs.GCP_RESOURCE_REGION }}-docker.pkg.dev"
           username: _json_key
           password: ${{ inputs.GCP_CREDENTIALS_JSON }}
-
-      - name: Build agent image
-
-      - name: Reprovision VM with new image
