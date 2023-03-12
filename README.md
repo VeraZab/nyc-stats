@@ -1,6 +1,13 @@
-# ELT Project Template [BigQuery, Prefect Cloud, Dbt Core, Terraform]
+# Zoomcamp 2023 Final Project
 
-The intent of this template is to quickstart development of your data pipeline, with BigQuery, Prefect open source, Dbt Core, and Terraform.
+### To reproduce:
+
+1. Clone this repository. Do `rm -rf .git` to remove all the git history. Then `git init` to reinitialize repo. Commit and push the code to your own remote repository. Make note of the url of your repository in env vars.
+1. On GCP: create an account, create billing, create project. Install `gcloud` CLI. Run `gcloud init` to configure your CLI settings. See everything is correct with `gcloud info`. Enter all related env variables into env file and export them. Run `make gcp-setup` to create service account and download api key.
+1. On Prefect Cloud: create an account, a workspace, an api key. Enter all Prefect related env vars into your .env file. Export your env vars, and run `make prefect-api-url`. Enter api url into env vars. Set PREFECT_API_KEY to PREFECT_KEY (needed because of [bug](https://github.com/PrefectHQ/prefect/issues/7797)). Reexport env vars.
+1. Install terraform. Run `terraform init` in terraform directory. Fill all environment variables related to Terraform and export them.
+1.
+1. Install docker and start it. Build the image for the Prefect agent with `docker build -t agent -f ./Dockerfiles/agent.Dockerfile .` Run your docker container with `docker run -e PREFECT_API_URL=$PREFECT_API_URL -e PREFECT_API_KEY=$PREFECT_API_KEY -e PREFECT_AGENT_QUEUE_NAME=$PREFECT_AGENT_QUEUE_NAME -d agent:latest`.
 
 ## Prerequisites:
 
