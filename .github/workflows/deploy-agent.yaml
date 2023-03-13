@@ -67,7 +67,7 @@ jobs:
         run: gcloud compute instances delete $GCP_COMPUTE_ENGINE_NAME --zone $GCP_COMPUTE_ENGINE_REGION --quiet --verbosity none
         shell: bash
 
-      - name: Deploy Compute Engine instance in GCP
+      - name: Deploy new Compute Engine with new image to GCP
         shell: bash
         run: |
           gcloud compute instances create-with-container $GCP_COMPUTE_ENGINE_NAME \
