@@ -77,11 +77,11 @@ jobs:
 
       - name: "Configure Poetry"
         run: |
-          poetry config virtualenvs.in-project true
+          poetry config virtualenvs.create false --local
 
       - name: "Install dependencies"
         run: |
-          poetry install --no-root --without dev
+          poetry install --no-root --without dev,flows
 
       - name: Create Updated Cloud Run Block
         run: |
