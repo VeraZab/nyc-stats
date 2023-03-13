@@ -58,7 +58,7 @@ jobs:
           docker push $RAW_IMAGE
           docker push $IMAGE_URI
 
-          echo "::set-output name=IMAGE_URI::$IMAGE_URI"
+          echo "IMAGE_URI=$IMAGE_URI" >> $GITHUB_OUTPUT
         shell: bash
 
       - name: Delete existing Compute Engine instance if there is one
