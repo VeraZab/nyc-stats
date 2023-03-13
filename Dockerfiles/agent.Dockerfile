@@ -1,9 +1,9 @@
 FROM python:3.11
 
 ENV PATH="/root/.local/bin:${PATH}"
-ENV PREFECT_API_KEY="`curl http://metadata.google.internal/computeMetadata/v1/instance/attributes/PREFECT_API_KEY -H 'Metadata-Flavor: Google'`"
-ENV PREFECT_API_URL="`curl http://metadata.google.internal/computeMetadata/v1/instance/attributes/PREFECT_API_URL -H 'Metadata-Flavor: Google'`"
-ENV PREFECT_AGENT_QUEUE_NAME="`curl http://metadata.google.internal/computeMetadata/v1/instance/attributes/PREFECT_AGENT_QUEUE_NAME -H 'Metadata-Flavor: Google'`"
+RUN export PREFECT_API_KEY=`curl  -H "Metadata-Flavor: Google" "http://metadata.google.internal/computeMetadata/v1/instance/attributes/PREFECT_API_KEY"`
+RUN export PREFECT_API_URL=`curl  -H "Metadata-Flavor: Google" "http://metadata.google.internal/computeMetadata/v1/instance/attributes/PREFECT_API_URL"`
+RUN export PREFECT_AGENT_QUEUE_NAME=`curl  -H "Metadata-Flavor: Google" "http://metadata.google.internal/computeMetadata/v1/instance/attributes/PREFECT_AGENT_QUEUE_NAME"`
 
 RUN apt-get update -qq && \
   apt-get -qq install \
@@ -13,6 +13,6 @@ COPY pyproject.toml poetry.lock /
 
 RUN curl -sSL https://install.python-poetry.org | python - \
   && poetry config virtualenvs.create false --local \
-  && poetry install --no-dev --no-root
+  && poetry install --without dev,flows --no-root
 
 ENTRYPOINT ["sh", "-c", "prefect agent start --work-queue $PREFECT_AGENT_QUEUE_NAME"]
