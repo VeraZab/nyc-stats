@@ -47,6 +47,7 @@ jobs:
           --name "Github Action Deployment" \
           --version $GITHUB_SHA \
           --work-queue $PREFECT_AGENT_QUEUE_NAME \
+          --storage-block github/$PREFECT_GITHUB_BLOCK_NAME \
           --infra-block cloud-run-job/$PREFECT_CLOUD_RUN_BLOCK_NAME \
           --skip-upload --apply
         shell: bash

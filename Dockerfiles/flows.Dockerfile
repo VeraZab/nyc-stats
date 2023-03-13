@@ -28,7 +28,7 @@ RUN apt-get update -qq && \
 
 WORKDIR pipeline
 
-COPY . .
+COPY pyproject.toml poetry.lock .
 
 RUN curl -sSL https://install.python-poetry.org | python - \
   && poetry config virtualenvs.create false --local \
