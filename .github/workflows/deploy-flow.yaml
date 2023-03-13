@@ -100,4 +100,4 @@ jobs:
           )
           block.save("nyc-stats", overwrite=True)
           EOF
-          python cr-blocks.py
+          python cr-block.py
