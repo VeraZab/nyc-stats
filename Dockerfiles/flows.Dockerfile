@@ -1,0 +1,35 @@
+FROM python:3.11
+
+ENV PATH="/root/.local/bin:${PATH}"
+
+ARG PREFECT_API_KEY
+ENV PREFECT_API_KEY=$PREFECT_API_KEY
+
+ARG PREFECT_API_URL
+ENV PREFECT_API_URL=$PREFECT_API_URL
+
+ARG PREFECT_GCP_CREDENTIALS_BLOCK_NAME
+ENV PREFECT_GCP_CREDENTIALS_BLOCK_NAME=$PREFECT_GCP_CREDENTIALS_BLOCK_NAME
+
+ARG GCP_DATASET_NAME
+ENV GCP_DATASET_NAME=$GCP_DATASET_NAME
+
+ARG GCP_DATASET_TABLE_NAME
+ENV GCP_DATASET_TABLE_NAME=$GCP_DATASET_TABLE_NAME
+
+ARG GCP_PROJECT_ID
+ENV GCP_PROJECT_ID=$GCP_PROJECT_ID
+
+ENV PYTHONUNBUFFERED True
+
+RUN apt-get update -qq && \
+  apt-get -qq install \
+  curl
+
+WORKDIR pipeline
+
+COPY . .
+
+RUN curl -sSL https://install.python-poetry.org | python - \
+  && poetry config virtualenvs.create false --local \
+  && poetry install --without dev --no-root

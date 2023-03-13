@@ -1,16 +1,24 @@
-name: Build and Apply Flows on Manual Trigger
+name: Rebuild Cloud Run Infra
 
 env:
+  PREFECT_API_KEY: ${{ secrets.PREFECT_API_KEY }}
   PREFECT_API_URL: ${{ secrets.PREFECT_API_URL }}
-  PREFECT_GITHUB_BLOCK_NAME: ${{ secrets.PREFECT_GITHUB_BLOCK_NAME }}
-  PREFECT_AGENT_QUEUE_NAME: ${{ secrets.PREFECT_AGENT_QUEUE_NAME }}
+  PREFECT_GCP_CREDENTIALS_BLOCK_NAME: ${{ secrets.PREFECT_GCP_CREDENTIALS_BLOCK_NAME }}
+  GCP_RESOURCE_REGION: ${{ secrets.GCP_RESOURCE_REGION }}
+  GCP_PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
+  GCP_ARTIFACT_REPOSITORY_NAME: ${{ secrets.GCP_ARTIFACT_REPOSITORY_NAME }}
+  GCP_SERVICE_ACCOUNT_API_KEY: ${{ secrets.GCP_SERVICE_ACCOUNT_API_KEY }}
+  GCP_DATASET_NAME: ${{ secrets.GCP_DATASET_NAME }}
+  GCP_DATASET_TABLE_NAME: ${{ secrets.GCP_DATASET_TABLE_NAME }}
+  FLOW_IMAGE_NAME: ${{ secrets.FLOW_IMAGE_NAME }}
 
 on:
   workflow_dispatch:
+    inputs:
 
 jobs:
-  build-and-apply-deployment:
-    name: Build and apply deployment
+  provision-cloud-run-block:
+    name: Setup Flow Infrastructure
 
     runs-on: ubuntu-latest
     timeout-minutes: 45
@@ -21,10 +29,41 @@ jobs:
           persist-credentials: false
           fetch-depth: 0
 
-      - name: Set up Python 3.11
-        uses: actions/setup-python@v4
+      - name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v1
         with:
-          python-version: "^3.11"
+          credentials_json: ${{ secrets.GCP_SERVICE_ACCOUNT_API_KEY }}
+
+      - name: Set up Cloud SDK
+        uses: google-github-actions/setup-gcloud@v1
+
+      - name: Login to GAR
+        uses: docker/login-action@v2
+        with:
+          registry: "${{ env.GCP_RESOURCE_REGION }}-docker.pkg.dev"
+          username: _json_key
+          password: ${{ secrets.GCP_SERVICE_ACCOUNT_API_KEY }}
+
+      - name: Build and push image to GAR
+        id: docker-agent-image
+        run: |
+          RAW_IMAGE=$GCP_RESOURCE_REGION-docker.pkg.dev/$GCP_PROJECT/$GCP_ARTIFACT_REPOSITORY_NAME/$FLOW_IMAGE_NAME
+          IMAGE_URI=$GCP_RESOURCE_REGION-docker.pkg.dev/$GCP_PROJECT/$GCP_ARTIFACT_REPOSITORY_NAME/$FLOW_IMAGE_NAME:$GITHUB_SHA
+
+          docker build -q --build-arg PREFECT_API_KEY=$PREFECT_API_KEY \
+            --build-arg PREFECT_API_URL=$PREFECT_API_URL \
+            --build-arg PREFECT_GCP_CREDENTIALS_BLOCK_NAME=$PREFECT_GCP_CREDENTIALS_BLOCK_NAME \
+            --build-arg GCP_DATASET_NAME=$GCP_DATASET_NAME \
+            --build-arg GCP_DATASET_TABLE_NAME=$GCP_DATASET_TABLE_NAME \
+            --build-arg GCP_PROJECT_ID=$GCP_PROJECT_ID \
+            -t $RAW_IMAGE -f ./Dockerfiles/flows.Dockerfile .
+
+          docker tag $RAW_IMAGE $IMAGE_URI
+          docker push $RAW_IMAGE
+          docker push $IMAGE_URI
+
+          echo "IMAGE_URI=$IMAGE_URI" >> $GITHUB_OUTPUT
+        shell: bash
 
       - name: "Set up Poetry"
         uses: abatilo/actions-poetry@v2.1.6
@@ -39,17 +78,21 @@ jobs:
         run: |
           poetry install --no-root --without dev
 
-      - name: Build and apply deployment
+      - name: Create Updated Cloud Run Block
         run: |
-          poetry run prefect deployment build ./flows/pipeline.py:main \
-          --name "Local Prefect Orion" \
-          --version $GITHUB_SHA \
-          --work-queue $PREFECT_AGENT_QUEUE_NAME \
-          --storage-block github/$PREFECT_GITHUB_BLOCK_NAME \
-          --apply
+          cat <<EOF > cr-block.py
+          from prefect_gcp.cloud_run import CloudRunJob
+          from prefect_gcp.credentials import GcpCredentials
 
-      - name: upload artifact
-        uses: actions/upload-artifact@v3
-        with:
-          name: main-deployment.yaml
-          path: main-deployment.yaml
+          block = CloudRunJob(
+            image=$IMAGE_URI,
+            region=$GCP_RESOURCE_REGION,
+            credentials=GcpCredentials.load($PREFECT_GCP_CREDENTIALS_BLOCK_NAME),
+            cpu=1,
+            memory=4096,
+            memory_unit="Mi",
+            timeout=3600,
+          )
+          block.save("nyc-stats", overwrite=True)
+          EOF
+          python cr-blocks.py
