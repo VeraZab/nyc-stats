@@ -89,17 +89,8 @@ jobs:
           from prefect_gcp.cloud_run import CloudRunJob
           from prefect_gcp.credentials import GcpCredentials
 
-          block = CloudRunJob(
-            image="${{ steps.docker-flow-image.outputs.IMAGE_URI }}",
-            region="${{ env.GCP_RESOURCE_REGION }}",
-            credentials=GcpCredentials.load("${{ env.PREFECT_GCP_CREDENTIALS_BLOCK_NAME }}"),
-            cpu=1,
-            memory=4096,
-            memory_unit="Mi",
-            timeout=3600,
-          )
-
-          block.save("nyc-stats", overwrite=True)
+          print("${{ steps.docker-flow-image.outputs.IMAGE_URI }}")
+          creds = GcpCredentials.load("${{ env.PREFECT_GCP_CREDENTIALS_BLOCK_NAME }}")
 
           EOF
 
