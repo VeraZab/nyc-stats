@@ -62,8 +62,7 @@ jobs:
         shell: bash
 
       - name: Delete existing Compute Engine instance if there is one
-        run: gcloud compute instances delete $GCP_COMPUTE_ENGINE_NAME --zone $GCP_RESOURCE_REGION --quiet --verbosity none
-        continue-on-error: true
+        run: gcloud compute instances delete $GCP_COMPUTE_ENGINE_NAME --zone $GCP_COMPUTE_ENGINE_REGION --quiet --verbosity none
         shell: bash
 
       - name: Deploy Compute Engine instance in GCP
