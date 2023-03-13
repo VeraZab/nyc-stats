@@ -7,7 +7,7 @@ env:
   GCP_RESOURCE_REGION: ${{ secrets.GCP_RESOURCE_REGION }}
   GCP_COMPUTE_ENGINE_REGION: ${{ secrets.GCP_COMPUTE_ENGINE_REGION }}
   GCP_PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
-  GCP_AGENT_ARTIFACT_REPOSITORY_NAME: ${{ secrets.GCP_AGENT_ARTIFACT_REPOSITORY_NAME }}
+  GCP_ARTIFACT_REPOSITORY_NAME: ${{ secrets.GCP_ARTIFACT_REPOSITORY_NAME }}
   AGENT_IMAGE_NAME: ${{ secrets.AGENT_IMAGE_NAME }}
   GCP_COMPUTE_ENGINE_NAME: ${{ secrets.GCP_COMPUTE_ENGINE_NAME }}
   GCP_SERVICE_ACCOUNT_EMAIL: ${{ secrets.GCP_SERVICE_ACCOUNT_EMAIL }}
@@ -18,7 +18,7 @@ on:
     inputs:
 
 jobs:
-  build-and-apply-deployment:
+  build-and-provision-vm:
     name: Provision Prefect Agent VM
 
     runs-on: ubuntu-latest
@@ -48,8 +48,8 @@ jobs:
       - name: Build and push image to GAR
         id: docker-agent-image
         run: |
-          RAW_IMAGE=$GCP_RESOURCE_REGION-docker.pkg.dev/$GCP_PROJECT/$GCP_AGENT_ARTIFACT_REPOSITORY_NAME/$AGENT_IMAGE_NAME
-          IMAGE_URI=$GCP_RESOURCE_REGION-docker.pkg.dev/$GCP_PROJECT/$GCP_AGENT_ARTIFACT_REPOSITORY_NAME/$AGENT_IMAGE_NAME:$GITHUB_SHA
+          RAW_IMAGE=$GCP_RESOURCE_REGION-docker.pkg.dev/$GCP_PROJECT/$GCP_ARTIFACT_REPOSITORY_NAME/$AGENT_IMAGE_NAME
+          IMAGE_URI=$GCP_RESOURCE_REGION-docker.pkg.dev/$GCP_PROJECT/$GCP_ARTIFACT_REPOSITORY_NAME/$AGENT_IMAGE_NAME:$GITHUB_SHA
 
           docker build -q --build-arg PREFECT_API_KEY=$PREFECT_API_KEY \
             --build-arg PREFECT_API_URL=$PREFECT_API_URL \
