@@ -1,9 +1,15 @@
 FROM python:3.11
 
 ENV PATH="/root/.local/bin:${PATH}"
-RUN export PREFECT_API_KEY=`curl  -H "Metadata-Flavor: Google" "http://metadata.google.internal/computeMetadata/v1/instance/attributes/PREFECT_API_KEY"`
-RUN export PREFECT_API_URL=`curl  -H "Metadata-Flavor: Google" "http://metadata.google.internal/computeMetadata/v1/instance/attributes/PREFECT_API_URL"`
-RUN export PREFECT_AGENT_QUEUE_NAME=`curl  -H "Metadata-Flavor: Google" "http://metadata.google.internal/computeMetadata/v1/instance/attributes/PREFECT_AGENT_QUEUE_NAME"`
+
+ARG PREFECT_API_KEY
+ENV PREFECT_API_KEY=$PREFECT_API_KEY
+
+ARG PREFECT_API_URL
+ENV PREFECT_API_URL=$PREFECT_API_URL
+
+ARG PREFECT_AGENT_QUEUE_NAME
+ENV PREFECT_AGENT_QUEUE_NAME=$PREFECT_AGENT_QUEUE_NAME
 
 RUN apt-get update -qq && \
   apt-get -qq install \

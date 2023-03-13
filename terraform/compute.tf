@@ -21,10 +21,4 @@ resource "google_compute_instance" "agent-vm" {
     access_config {
     }
   }
-
-  metadata = {
-    PREFECT_AGENT_QUEUE_NAME = var.PREFECT_AGENT_QUEUE_NAME
-    PREFECT_API_KEY          = var.PREFECT_API_KEY
-    PREFECT_API_URL          = var.PREFECT_API_URL
-  }
 }
