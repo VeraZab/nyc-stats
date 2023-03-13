@@ -5,6 +5,7 @@ env:
   PREFECT_API_URL: ${{ secrets.PREFECT_API_URL }}
   PREFECT_AGENT_QUEUE_NAME: ${{ secrets.PREFECT_AGENT_QUEUE_NAME }}
   GCP_RESOURCE_REGION: ${{ secrets.GCP_RESOURCE_REGION }}
+  GCP_COMPUTE_ENGINE_REGION: ${{ secrets.GCP_COMPUTE_ENGINE_REGION }}
   GCP_PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
   GCP_AGENT_ARTIFACT_REPOSITORY_NAME: ${{ secrets.GCP_AGENT_ARTIFACT_REPOSITORY_NAME }}
   AGENT_IMAGE_NAME: ${{ secrets.AGENT_IMAGE_NAME }}
@@ -69,7 +70,7 @@ jobs:
         shell: bash
         run: |
           gcloud compute instances create-with-container $GCP_COMPUTE_ENGINE_NAME \
-            --zone $GCP_RESOURCE_REGION \
+            --zone $GCP_COMPUTE_ENGINE_REGION \
             --machine-type e2-micro \
             --service-account $GCP_SERVICE_ACCOUNT_EMAIL \
             --scopes "cloud-platform" \
