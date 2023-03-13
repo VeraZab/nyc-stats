@@ -38,7 +38,7 @@ jobs:
 
       - name: "Install dependencies"
         run: |
-          poetry install --no-root --without dev,flows
+          poetry install --no-root --without dev
 
       - name: Build and apply deployment
         run: |
