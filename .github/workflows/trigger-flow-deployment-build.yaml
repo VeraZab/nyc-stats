@@ -1,6 +1,7 @@
 name: Build and Apply Flows on Manual Trigger
 
 env:
+  PREFECT_API_KEY: ${{ secrets.PREFECT_API_KEY }}
   PREFECT_API_URL: ${{ secrets.PREFECT_API_URL }}
   PREFECT_GITHUB_BLOCK_NAME: ${{ secrets.PREFECT_GITHUB_BLOCK_NAME }}
   PREFECT_AGENT_QUEUE_NAME: ${{ secrets.PREFECT_AGENT_QUEUE_NAME }}
