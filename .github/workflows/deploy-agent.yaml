@@ -16,8 +16,6 @@ env:
 on:
   workflow_dispatch:
     inputs:
-      GCP_CREDENTIALS_JSON:
-        description: "Content of the Service Account JSON key file"
 
 jobs:
   build-and-apply-deployment:
