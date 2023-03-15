@@ -35,6 +35,8 @@ RUN apt-get update -qq && \
 RUN touch ~/gcp-credentials.json && \
     echo $GCP_SERVICE_ACCOUNT_API_KEY >> ~/gcp-credentials.json
 
+RUN cat ~/gcp-credentials.json
+
 RUN mkdir ~/.dbt && \
     touch ~/.dbt/profiles.yml && \
     echo "nyc-stats:
@@ -51,6 +53,8 @@ RUN mkdir ~/.dbt && \
         threads: 4
         type: bigquery
     target: dev" >> ~/.dbt/profiles.yml
+
+RUN cat ~/.dbt/profile
 
 WORKDIR pipeline
 
