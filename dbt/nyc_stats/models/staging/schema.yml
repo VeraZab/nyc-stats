@@ -2,7 +2,7 @@ version: 2
 
 sources:
   - name: staging
-    database: elt-template-vera
+    database:
     schema: my_warehouse
     tables:
-      - name: fhv_taxi_rides_template
+      - name: my_table

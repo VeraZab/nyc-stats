@@ -44,7 +44,7 @@ RUN touch gcp-credentials.json && \
     echo -e $GCP_SERVICE_ACCOUNT_API_KEY >> gcp-credentials.json
 
 RUN touch profiles.yml && \
-    echo "nyc-stats:" >> profiles.yml && \
+    echo "nyc_stats:" >> profiles.yml && \
     echo "  outputs:" >> profiles.yml && \
     echo "    dev:" >> profiles.yml && \
     echo "      dataset: ${GCP_DATASET_NAME}" >> profiles.yml && \

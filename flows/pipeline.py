@@ -13,7 +13,7 @@ load_dotenv()
 @task(log_prints=True)
 def transform():
     # This path changes dynamically when on VM
-    dbt_path = f"{os.getcwd()}/dbt/nyc-stats"
+    dbt_path = f"{os.getcwd()}/dbt/nyc_stats"
 
     dbt_op = DbtCoreOperation(
         commands=["dbt build"], working_dir=dbt_path, project_dir=dbt_path, profiles_dir=os.getcwd()
