@@ -33,7 +33,7 @@ RUN apt-get update -qq && \
   curl
 
 RUN touch ~/gcp-credentials.json && \
-    echo $GCP_SERVICE_ACCOUNT_API_KEY >> ~/gcp-credentials.json
+    echo -e $GCP_SERVICE_ACCOUNT_API_KEY >> ~/gcp-credentials.json
 
 RUN cat ~/gcp-credentials.json
 
@@ -54,7 +54,7 @@ RUN mkdir ~/.dbt && \
     echo "      type: bigquery" >> ~/.dbt/profiles.yml && \
     echo "  target: dev" >> ~/.dbt/profiles.yml
 
-RUN cat ~/.dbt/profile
+RUN cat ~/.dbt/profiles.yml
 
 WORKDIR pipeline
 
