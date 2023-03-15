@@ -32,30 +32,6 @@ RUN apt-get update -qq && \
   apt-get -qq install \
   curl
 
-RUN touch ~/gcp-credentials.json && \
-    echo -e $GCP_SERVICE_ACCOUNT_API_KEY >> ~/gcp-credentials.json
-
-RUN cat ~/gcp-credentials.json
-
-RUN mkdir ~/.dbt && \
-    touch ~/.dbt/profiles.yml && \
-    echo "nyc-stats:" >> ~/.dbt/profiles.yml && \
-    echo "  outputs:" >> ~/.dbt/profiles.yml && \
-    echo "    dev:" >> ~/.dbt/profiles.yml && \
-    echo "      dataset: ${GCP_DATASET_NAME}" >> ~/.dbt/profiles.yml && \
-    echo "      job_execution_timeout_seconds: 300" >> ~/.dbt/profiles.yml && \
-    echo "      job_retries: 1" >> ~/.dbt/profiles.yml && \
-    echo "      keyfile: ~/gcp-credentials.json" >> ~/.dbt/profiles.yml && \
-    echo "      location: ${GCP_RESOURCE_REGION}" >> ~/.dbt/profiles.yml && \
-    echo "      method: service-account" >> ~/.dbt/profiles.yml && \
-    echo "      priority: interactive" >> ~/.dbt/profiles.yml && \
-    echo "      project: ${GCP_PROJECT_ID}" >> ~/.dbt/profiles.yml && \
-    echo "      threads: 4" >> ~/.dbt/profiles.yml && \
-    echo "      type: bigquery" >> ~/.dbt/profiles.yml && \
-    echo "  target: dev" >> ~/.dbt/profiles.yml
-
-RUN cat ~/.dbt/profiles.yml
-
 WORKDIR pipeline
 
 COPY pyproject.toml poetry.lock ./
@@ -63,3 +39,22 @@ COPY pyproject.toml poetry.lock ./
 RUN curl -sSL https://install.python-poetry.org | python - \
   && poetry config virtualenvs.create false --local \
   && poetry install --without dev --no-root
+
+RUN touch gcp-credentials.json && \
+    echo -e $GCP_SERVICE_ACCOUNT_API_KEY >> gcp-credentials.json
+
+RUN touch profiles.yml && \
+    echo "nyc-stats:" >> profiles.yml && \
+    echo "  outputs:" >> profiles.yml && \
+    echo "    dev:" >> profiles.yml && \
+    echo "      dataset: ${GCP_DATASET_NAME}" >> profiles.yml && \
+    echo "      job_execution_timeout_seconds: 300" >> profiles.yml && \
+    echo "      job_retries: 1" >> profiles.yml && \
+    echo "      keyfile: ${PWD}/gcp-credentials.json" >> profiles.yml && \
+    echo "      location: ${GCP_RESOURCE_REGION}" >> profiles.yml && \
+    echo "      method: service-account" >> profiles.yml && \
+    echo "      priority: interactive" >> profiles.yml && \
+    echo "      project: ${GCP_PROJECT_ID}" >> profiles.yml && \
+    echo "      threads: 4" >> profiles.yml && \
+    echo "      type: bigquery" >> profiles.yml && \
+    echo "  target: dev" >> profiles.yml

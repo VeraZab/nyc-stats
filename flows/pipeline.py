@@ -16,9 +16,7 @@ def transform():
     dbt_path = f"{os.getcwd()}/dbt/nyc-stats"
 
     dbt_op = DbtCoreOperation(
-        commands=["dbt build"],
-        working_dir=dbt_path,
-        project_dir=dbt_path,
+        commands=["dbt build"], working_dir=dbt_path, project_dir=dbt_path, profiles_dir=os.getcwd()
     )
 
     dbt_op.run()
