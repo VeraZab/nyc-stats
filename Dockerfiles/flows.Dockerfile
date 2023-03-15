@@ -39,20 +39,20 @@ RUN cat ~/gcp-credentials.json
 
 RUN mkdir ~/.dbt && \
     touch ~/.dbt/profiles.yml && \
-    echo "nyc-stats:
-    outputs:
-        dev:
-        dataset: ${GCP_DATASET_NAME}
-        job_execution_timeout_seconds: 300
-        job_retries: 1
-        keyfile: ~/gcp-credentials.json
-        location: ${GCP_RESOURCE_REGION}
-        method: service-account
-        priority: interactive
-        project: ${GCP_PROJECT_ID}
-        threads: 4
-        type: bigquery
-    target: dev" >> ~/.dbt/profiles.yml
+    echo "nyc-stats:" >> ~/.dbt/profiles.yml && \
+    echo "  outputs:" >> ~/.dbt/profiles.yml && \
+    echo "    dev:" >> ~/.dbt/profiles.yml && \
+    echo "      dataset: ${GCP_DATASET_NAME}" >> ~/.dbt/profiles.yml && \
+    echo "      job_execution_timeout_seconds: 300" >> ~/.dbt/profiles.yml && \
+    echo "      job_retries: 1" >> ~/.dbt/profiles.yml && \
+    echo "      keyfile: ~/gcp-credentials.json" >> ~/.dbt/profiles.yml && \
+    echo "      location: ${GCP_RESOURCE_REGION}" >> ~/.dbt/profiles.yml && \
+    echo "      method: service-account" >> ~/.dbt/profiles.yml && \
+    echo "      priority: interactive" >> ~/.dbt/profiles.yml && \
+    echo "      project: ${GCP_PROJECT_ID}" >> ~/.dbt/profiles.yml && \
+    echo "      threads: 4" >> ~/.dbt/profiles.yml && \
+    echo "      type: bigquery" >> ~/.dbt/profiles.yml && \
+    echo "  target: dev" >> ~/.dbt/profiles.yml
 
 RUN cat ~/.dbt/profile
 
