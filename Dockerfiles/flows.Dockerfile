@@ -20,11 +20,37 @@ ENV GCP_DATASET_TABLE_NAME=$GCP_DATASET_TABLE_NAME
 ARG GCP_PROJECT_ID
 ENV GCP_PROJECT_ID=$GCP_PROJECT_ID
 
+ARG GCP_SERVICE_ACCOUNT_API_KEY
+ENV GCP_SERVICE_ACCOUNT_API_KEY=$GCP_SERVICE_ACCOUNT_API_KEY
+
+ARG GCP_RESOURCE_REGION
+ENV GCP_RESOURCE_REGION=$GCP_RESOURCE_REGION
+
 ENV PYTHONUNBUFFERED True
 
 RUN apt-get update -qq && \
   apt-get -qq install \
   curl
+
+RUN touch ~/gcp-credentials.json && \
+    echo $GCP_SERVICE_ACCOUNT_API_KEY >> ~/gcp-credentials.json
+
+RUN mkdir ~/.dbt && \
+    touch ~/.dbt/profiles.yml && \
+    echo "nyc-stats:
+    outputs:
+        dev:
+        dataset: ${GCP_DATASET_NAME}
+        job_execution_timeout_seconds: 300
+        job_retries: 1
+        keyfile: ~/gcp-credentials.json
+        location: ${GCP_RESOURCE_REGION}
+        method: service-account
+        priority: interactive
+        project: ${GCP_PROJECT_ID}
+        threads: 4
+        type: bigquery
+    target: dev" >> ~/.dbt/profiles.yml
 
 WORKDIR pipeline
 

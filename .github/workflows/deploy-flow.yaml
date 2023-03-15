@@ -61,6 +61,8 @@ jobs:
             --build-arg GCP_DATASET_NAME=$GCP_DATASET_NAME \
             --build-arg GCP_DATASET_TABLE_NAME=$GCP_DATASET_TABLE_NAME \
             --build-arg GCP_PROJECT_ID=$GCP_PROJECT_ID \
+            --build-arg GCP_SERVICE_ACCOUNT_API_KEY=$GCP_SERVICE_ACCOUNT_API_KEY \
+            --build-arg GCP_RESOURCE_REGION=$GCP_RESOURCE_REGION \
             -t $RAW_IMAGE -f ./Dockerfiles/flows.Dockerfile .
 
           docker tag $RAW_IMAGE $IMAGE_URI
