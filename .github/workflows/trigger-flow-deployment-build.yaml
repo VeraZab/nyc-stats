@@ -9,7 +9,9 @@ env:
 
 on:
   workflow_dispatch:
-
+    inputs:
+      json:
+        description: just a test
 jobs:
   build-and-apply-deployment:
     name: Build and apply deployment
