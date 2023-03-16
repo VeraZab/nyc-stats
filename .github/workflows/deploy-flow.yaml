@@ -53,8 +53,8 @@ jobs:
         uses: docker/login-action@v2
         with:
           registry: "${{ env.GCP_RESOURCE_REGION }}-docker.pkg.dev"
-          username: oauth2accesstoken
-          password: ${{ steps.auth.outputs.access_token }}
+          username: _json_key_base64
+          password: ${{ secrets.BASE64 }}
 
       - name: Build and push image to GAR
         id: docker-flow-image
