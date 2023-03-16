@@ -30,7 +30,8 @@ ENV PYTHONUNBUFFERED True
 
 RUN apt-get update -qq && \
   apt-get -qq install \
-  curl
+  curl \
+  jq
 
 WORKDIR pipeline
 
@@ -40,8 +41,7 @@ RUN curl -sSL https://install.python-poetry.org | python - \
   && poetry config virtualenvs.create false --local \
   && poetry install --without dev --no-root
 
-RUN touch gcp-credentials.json && \
-    echo -e $GCP_SERVICE_ACCOUNT_API_KEY >> gcp-credentials.json
+RUN echo "$GCP_SERVICE_ACCOUNT_API_KEY" | jq '.' > gcp-credentials.json
 
 RUN touch profiles.yml && \
     echo "nyc_stats:" >> profiles.yml && \
