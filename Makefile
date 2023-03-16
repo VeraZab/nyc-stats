@@ -1,7 +1,7 @@
 include .env
 
 ####################################################################################################################
-# Testing, auto formatting, type checks, & Lint checks
+# Auto formatting, type checks, & Lint checks
 
 format:
 	python -m black -S --line-length 79 .
@@ -33,9 +33,6 @@ prefect-api-url:
 		prefect config view &&\
 		make prefect-cloud-logout\
 	)
-
-prefect-blocks:
-	prefect block register --file ./utilities/setup-prefect-blocks.py
 
 ####################################################################################################################
 # Google Cloud
