@@ -23,8 +23,8 @@ ENV GCP_PROJECT_ID=$GCP_PROJECT_ID
 ARG GCP_RESOURCE_REGION
 ENV GCP_RESOURCE_REGION=$GCP_RESOURCE_REGION
 
-ARG BASE64
-ENV BASE64=$BASE64
+ARG GCP_SERVICE_ACCOUNT_API_KEY_BASE64
+ENV GCP_SERVICE_ACCOUNT_API_KEY_BASE64=$GCP_SERVICE_ACCOUNT_API_KEY_BASE64
 
 ENV PYTHONUNBUFFERED True
 
@@ -41,7 +41,7 @@ RUN curl -sSL https://install.python-poetry.org | python - \
   && poetry config virtualenvs.create false --local \
   && poetry install --without dev --no-root
 
-RUN echo "$BASE64" | base64 --decode | jq > gcp-credentials.json
+RUN echo "$GCP_SERVICE_ACCOUNT_API_KEY_BASE64" | base64 --decode | jq > gcp-credentials.json
 
 RUN touch profiles.yml && \
     echo "nyc_stats:" >> profiles.yml && \
