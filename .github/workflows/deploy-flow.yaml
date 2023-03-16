@@ -13,8 +13,9 @@ env:
   FLOW_IMAGE_NAME: ${{ secrets.FLOW_IMAGE_NAME }}
 
 on:
-  workflow_dispatch:
-    inputs:
+  push:
+    branches:
+      - main
 
 jobs:
   provision-cloud-run-block:
