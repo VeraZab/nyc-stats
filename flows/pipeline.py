@@ -3,7 +3,6 @@ import os
 import pandas as pd
 from dotenv import load_dotenv
 from prefect import flow, task
-from prefect.tasks import task_input_hash
 from prefect_dbt import DbtCoreOperation
 from prefect_gcp import GcpCredentials
 
@@ -12,11 +11,14 @@ load_dotenv()
 
 @task(log_prints=True)
 def transform():
-    # This path changes dynamically when on VM
+    # This path changes dynamically as the block requires an absolute path
     dbt_path = f"{os.getcwd()}/dbt/nyc_stats"
 
     dbt_op = DbtCoreOperation(
-        commands=["dbt build"], working_dir=dbt_path, project_dir=dbt_path, profiles_dir=os.getcwd()
+        commands=["dbt build"],
+        working_dir=dbt_path,
+        project_dir=dbt_path,
+        profiles_dir=os.getcwd(),
     )
 
     dbt_op.run()
@@ -28,7 +30,9 @@ def load(blob):
     dataset_name = os.getenv("GCP_DATASET_NAME")
     dataset_table_name = os.getenv("GCP_DATASET_TABLE_NAME")
 
-    gcp_credentials = GcpCredentials.load(os.getenv("PREFECT_GCP_CREDENTIALS_BLOCK_NAME"))
+    gcp_credentials = GcpCredentials.load(
+        os.getenv("PREFECT_GCP_CREDENTIALS_BLOCK_NAME")
+    )
 
     blob.to_gbq(
         destination_table=f"{dataset_name}.{dataset_table_name}",
@@ -49,9 +53,8 @@ def extract(month, year):
     if len(f"{month}") == 1:
         month = f"0{month}"
 
-    data_url = (
-        f"https://github.com/DataTalksClub/nyc-tlc-data/releases/download/fhv/fhv_tripdata_{year}-{month}.csv.gz"
-    )
+    data_url = f"https://github.com/DataTalksClub/nyc-tlc-data/\
+        releases/download/fhv/fhv_tripdata_{year}-{month}.csv.gz"
     blob = pd.read_csv(data_url, nrows=100)
     return blob
 
