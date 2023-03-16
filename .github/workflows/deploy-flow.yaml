@@ -11,6 +11,11 @@ env:
   GCP_DATASET_NAME: ${{ secrets.GCP_DATASET_NAME }}
   GCP_DATASET_TABLE_NAME: ${{ secrets.GCP_DATASET_TABLE_NAME }}
   FLOW_IMAGE_NAME: ${{ secrets.FLOW_IMAGE_NAME }}
+  GCP_PRIVATE_KEY_ID: ${{ secrets.GCP_PRIVATE_KEY_ID }}
+  GCP_PRIVATE_KEY: ${{ secrets.GCP_PRIVATE_KEY }}
+  GCP_SERVICE_ACCOUNT_EMAIL: ${{ secrets.GCP_SERVICE_ACCOUNT_EMAIL }}
+  GCP_SERVICE_ACCOUNT_ID: ${{ secrets.GCP_SERVICE_ACCOUNT_ID }}
+  GCP_CLIENT_X509_CERT_URL: ${{ secrets.GCP_CLIENT_X509_CERT_URL }}
 
 on:
   workflow_dispatch:
@@ -61,8 +66,12 @@ jobs:
           --build-arg GCP_DATASET_NAME=$GCP_DATASET_NAME \
           --build-arg GCP_DATASET_TABLE_NAME=$GCP_DATASET_TABLE_NAME \
           --build-arg GCP_PROJECT_ID=$GCP_PROJECT_ID \
-          --build-arg GCP_SERVICE_ACCOUNT_API_KEY='${GCP_SERVICE_ACCOUNT_API_KEY}' \
-          --build-arg GCP_RESOURCE_REGION='${GCP_RESOURCE_REGION}' \
+          --build-arg GCP_RESOURCE_REGION=$GCP_RESOURCE_REGION \
+          --build-arg GCP_PRIVATE_KEY_ID=$GCP_PRIVATE_KEY_ID \
+          --build-arg GCP_PRIVATE_KEY='${GCP_PRIVATE_KEY}' \
+          --build-arg GCP_SERVICE_ACCOUNT_EMAIL=$GCP_SERVICE_ACCOUNT_EMAIL \
+          --build-arg GCP_SERVICE_ACCOUNT_ID=$GCP_SERVICE_ACCOUNT_ID \
+          --build-arg GCP_CLIENT_X509_CERT_URL=$GCP_CLIENT_X509_CERT_URL \
           -t $RAW_IMAGE \
           -f ./Dockerfiles/flows.Dockerfile .
 
