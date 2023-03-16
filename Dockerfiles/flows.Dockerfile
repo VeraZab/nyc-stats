@@ -41,7 +41,7 @@ RUN curl -sSL https://install.python-poetry.org | python - \
   && poetry config virtualenvs.create false --local \
   && poetry install --without dev --no-root
 
-RUN echo "$GCP_SERVICE_ACCOUNT_API_KEY" | jq '.' > gcp-credentials.json
+RUN echo "$GCP_SERVICE_ACCOUNT_API_KEY" | jq -R -s '.' > gcp-credentials.json
 
 RUN touch profiles.yml && \
     echo "nyc_stats:" >> profiles.yml && \
