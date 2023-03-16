@@ -1,4 +1,4 @@
-name: Build and Apply Flows on Manual Trigger
+name: Build and Apply Prefect Deployment
 
 env:
   PREFECT_API_KEY: ${{ secrets.PREFECT_API_KEY }}

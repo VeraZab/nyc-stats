@@ -1,4 +1,4 @@
-name: Trigger Agent VM Rebuild
+name: Rebuild Agent VM
 
 env:
   PREFECT_API_KEY: ${{ secrets.PREFECT_API_KEY }}
