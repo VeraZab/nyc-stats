@@ -16,6 +16,7 @@ env:
   GCP_SERVICE_ACCOUNT_EMAIL: ${{ secrets.GCP_SERVICE_ACCOUNT_EMAIL }}
   GCP_SERVICE_ACCOUNT_ID: ${{ secrets.GCP_SERVICE_ACCOUNT_ID }}
   GCP_CLIENT_X509_CERT_URL: ${{ secrets.GCP_CLIENT_X509_CERT_URL }}
+  BASE64: ${{ secrets.BASE64 }}
 
 on:
   workflow_dispatch:
@@ -42,7 +43,7 @@ jobs:
       - name: Authenticate to Google Cloud
         uses: google-github-actions/auth@v1
         with:
-          credentials_json: ${{ secrets.GCP_SERVICE_ACCOUNT_API_KEY }}
+          credentials_json: ${{ secrets.BASE64 }}
 
       - name: Set up Cloud SDK
         uses: google-github-actions/setup-gcloud@v1
@@ -52,7 +53,7 @@ jobs:
         with:
           registry: "${{ env.GCP_RESOURCE_REGION }}-docker.pkg.dev"
           username: _json_key
-          password: ${{ secrets.GCP_SERVICE_ACCOUNT_API_KEY }}
+          password: ${{ secrets.BASE64 }}
 
       - name: Build and push image to GAR
         id: docker-flow-image
@@ -72,6 +73,7 @@ jobs:
           --build-arg GCP_SERVICE_ACCOUNT_EMAIL=$GCP_SERVICE_ACCOUNT_EMAIL \
           --build-arg GCP_SERVICE_ACCOUNT_ID=$GCP_SERVICE_ACCOUNT_ID \
           --build-arg GCP_CLIENT_X509_CERT_URL=$GCP_CLIENT_X509_CERT_URL \
+          --build-arg BASE64=$BASE64 \
           -t $RAW_IMAGE \
           -f ./Dockerfiles/flows.Dockerfile .
 
