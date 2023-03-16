@@ -4,7 +4,7 @@
 name = "agate"
 version = "1.6.3"
 description = "A data analysis library that is optimized for humans instead of machines."
-category = "main"
+category = "dev"
 optional = false
 python-versions = "*"
 files = [
@@ -186,7 +186,7 @@ tests-no-zope = ["cloudpickle", "cloudpickle", "hypothesis", "hypothesis", "mypy
 name = "babel"
 version = "2.11.0"
 description = "Internationalization utilities"
-category = "main"
+category = "dev"
 optional = false
 python-versions = ">=3.6"
 files = [
@@ -201,7 +201,7 @@ pytz = ">=2015.7"
 name = "betterproto"
 version = "1.2.5"
 description = "A better Protobuf / gRPC generator & library"
-category = "main"
+category = "dev"
 optional = false
 python-versions = ">=3.6"
 files = [
@@ -587,7 +587,7 @@ langdetect = ["langdetect"]
 name = "db-dtypes"
 version = "1.0.5"
 description = "Pandas Data Types for SQL systems (BigQuery, Spanner)"
-category = "main"
+category = "dev"
 optional = false
 python-versions = ">=3.7"
 files = [
@@ -605,7 +605,7 @@ pyarrow = ">=3.0.0"
 name = "dbt-bigquery"
 version = "1.4.1"
 description = "The Bigquery adapter plugin for dbt"
-category = "main"
+category = "dev"
 optional = false
 python-versions = ">=3.7"
 files = [
@@ -628,7 +628,7 @@ protobuf = ">=3.13.0,<4"
 name = "dbt-core"
 version = "1.4.3"
 description = "With dbt, data analysts and engineers can build analytics the way engineers build applications."
-category = "main"
+category = "dev"
 optional = false
 python-versions = ">=3.7.2"
 files = [
@@ -663,7 +663,7 @@ werkzeug = ">=1,<3"
 name = "dbt-extractor"
 version = "0.4.1"
 description = "A tool to analyze and extract information from Jinja used in dbt projects."
-category = "main"
+category = "dev"
 optional = false
 python-versions = ">=3.6.1"
 files = [
@@ -785,7 +785,7 @@ tqdm = ["tqdm"]
 name = "future"
 version = "0.18.3"
 description = "Clean single-source support for Python 3 and 2"
-category = "main"
+category = "dev"
 optional = false
 python-versions = ">=2.6, !=3.0.*, !=3.1.*, !=3.2.*"
 files = [
@@ -910,7 +910,7 @@ six = "*"
 name = "google-auth-oauthlib"
 version = "1.0.0"
 description = "Google Authentication Library"
-category = "main"
+category = "dev"
 optional = false
 python-versions = ">=3.6"
 files = [
@@ -929,7 +929,7 @@ tool = ["click (>=6.0.0)"]
 name = "google-cloud-bigquery"
 version = "3.6.0"
 description = "Google BigQuery API client library"
-category = "main"
+category = "dev"
 optional = false
 python-versions = ">=3.7"
 files = [
@@ -962,7 +962,7 @@ tqdm = ["tqdm (>=4.7.4,<5.0.0dev)"]
 name = "google-cloud-bigquery-storage"
 version = "2.16.2"
 description = "BigQuery Storage API API client library"
-category = "main"
+category = "dev"
 optional = false
 python-versions = ">=3.7"
 files = [
@@ -984,7 +984,7 @@ pyarrow = ["pyarrow (>=0.15.0)"]
 name = "google-cloud-bigquery-storage"
 version = "2.18.1"
 description = "Google Cloud Bigquery Storage API client library"
-category = "main"
+category = "dev"
 optional = false
 python-versions = ">=3.7"
 files = [
@@ -1006,7 +1006,7 @@ pyarrow = ["pyarrow (>=0.15.0)"]
 name = "google-cloud-core"
 version = "2.3.2"
 description = "Google Cloud API client core library"
-category = "main"
+category = "dev"
 optional = false
 python-versions = ">=3.7"
 files = [
@@ -1025,7 +1025,7 @@ grpc = ["grpcio (>=1.38.0,<2.0dev)"]
 name = "google-cloud-dataproc"
 version = "5.0.3"
 description = "Google Cloud Dataproc API client library"
-category = "main"
+category = "dev"
 optional = false
 python-versions = ">=3.7"
 files = [
@@ -1045,7 +1045,7 @@ libcst = ["libcst (>=0.2.5)"]
 name = "google-cloud-dataproc"
 version = "5.4.0"
 description = "Google Cloud Dataproc API client library"
-category = "main"
+category = "dev"
 optional = false
 python-versions = ">=3.7"
 files = [
@@ -1063,7 +1063,7 @@ protobuf = ">=3.19.5,<3.20.0 || >3.20.0,<3.20.1 || >3.20.1,<4.21.0 || >4.21.0,<4
 name = "google-cloud-storage"
 version = "2.7.0"
 description = "Google Cloud Storage API client library"
-category = "main"
+category = "dev"
 optional = false
 python-versions = ">=3.7"
 files = [
@@ -1085,7 +1085,7 @@ protobuf = ["protobuf (<5.0.0dev)"]
 name = "google-crc32c"
 version = "1.5.0"
 description = "A python wrapper of the C library 'Google CRC32C'"
-category = "main"
+category = "dev"
 optional = false
 python-versions = ">=3.7"
 files = [
@@ -1166,7 +1166,7 @@ testing = ["pytest"]
 name = "google-resumable-media"
 version = "2.4.1"
 description = "Utilities for Google Media Downloads and Resumable Uploads"
-category = "main"
+category = "dev"
 optional = false
 python-versions = ">= 3.7"
 files = [
@@ -1204,7 +1204,7 @@ grpc = ["grpcio (>=1.44.0,<2.0.0dev)"]
 name = "graphql-core"
 version = "3.2.3"
 description = "GraphQL implementation for Python, a port of GraphQL.js, the JavaScript reference implementation for GraphQL."
-category = "main"
+category = "dev"
 optional = false
 python-versions = ">=3.6,<4"
 files = [
@@ -1308,7 +1308,7 @@ async = ["aiofiles (>=0.7,<1.0)"]
 name = "grpc-google-iam-v1"
 version = "0.12.6"
 description = "IAM API client library"
-category = "main"
+category = "dev"
 optional = false
 python-versions = ">=3.7"
 files = [
@@ -1325,7 +1325,7 @@ protobuf = ">=3.19.5,<3.20.0 || >3.20.0,<3.20.1 || >3.20.1,<4.21.1 || >4.21.1,<4
 name = "grpcio"
 version = "1.51.3"
 description = "HTTP/2-based RPC framework"
-category = "main"
+category = "dev"
 optional = false
 python-versions = ">=3.7"
 files = [
@@ -1383,7 +1383,7 @@ protobuf = ["grpcio-tools (>=1.51.3)"]
 name = "grpcio-status"
 version = "1.48.2"
 description = "Status proto mapping for gRPC"
-category = "main"
+category = "dev"
 optional = false
 python-versions = ">=3.6"
 files = [
@@ -1400,7 +1400,7 @@ protobuf = ">=3.12.0"
 name = "grpclib"
 version = "0.4.3"
 description = "Pure-Python gRPC implementation for asyncio"
-category = "main"
+category = "dev"
 optional = false
 python-versions = ">=3.7"
 files = [
@@ -1446,7 +1446,7 @@ hyperframe = ">=6.0,<7"
 name = "hologram"
 version = "0.0.15"
 description = "JSON schema generation from dataclasses"
-category = "main"
+category = "dev"
 optional = false
 python-versions = "*"
 files = [
@@ -1560,7 +1560,7 @@ files = [
 name = "isodate"
 version = "0.6.1"
 description = "An ISO 8601 date/time/duration parser and formatter"
-category = "main"
+category = "dev"
 optional = false
 python-versions = "*"
 files = [
@@ -1687,7 +1687,7 @@ adal = ["adal (>=1.0.2)"]
 name = "leather"
 version = "0.3.4"
 description = "Python charting for 80% of humans."
-category = "main"
+category = "dev"
 optional = false
 python-versions = "*"
 files = [
@@ -1702,7 +1702,7 @@ six = ">=1.6.1"
 name = "logbook"
 version = "1.5.3"
 description = "A logging replacement for Python"
-category = "main"
+category = "dev"
 optional = false
 python-versions = "*"
 files = [
@@ -1852,7 +1852,7 @@ files = [
 name = "mashumaro"
 version = "3.3.1"
 description = "Fast serialization framework on top of dataclasses"
-category = "main"
+category = "dev"
 optional = false
 python-versions = ">=3.7"
 files = [
@@ -1898,7 +1898,7 @@ files = [
 name = "minimal-snowplow-tracker"
 version = "0.0.2"
 description = "A minimal snowplow event tracker for Python. Add analytics to your Python and Django apps, webapps and games"
-category = "main"
+category = "dev"
 optional = false
 python-versions = "*"
 files = [
@@ -1913,7 +1913,7 @@ six = ">=1.9.0,<2.0"
 name = "msgpack"
 version = "1.0.4"
 description = "MessagePack serializer"
-category = "main"
+category = "dev"
 optional = false
 python-versions = "*"
 files = [
@@ -1975,7 +1975,7 @@ files = [
 name = "multidict"
 version = "6.0.4"
 description = "multidict implementation"
-category = "main"
+category = "dev"
 optional = false
 python-versions = ">=3.7"
 files = [
@@ -2071,7 +2071,7 @@ files = [
 name = "networkx"
 version = "2.8.8"
 description = "Python package for creating and manipulating graphs and networks"
-category = "main"
+category = "dev"
 optional = false
 python-versions = ">=3.8"
 files = [
@@ -2090,7 +2090,7 @@ test = ["codecov (>=2.1)", "pytest (>=7.2)", "pytest-cov (>=4.0)"]
 name = "numpy"
 version = "1.24.2"
 description = "Fundamental package for array computing in Python"
-category = "main"
+category = "dev"
 optional = false
 python-versions = ">=3.8"
 files = [
@@ -2211,7 +2211,7 @@ files = [
 name = "pandas"
 version = "1.5.3"
 description = "Powerful data structures for data analysis, time series, and statistics"
-category = "main"
+category = "dev"
 optional = false
 python-versions = ">=3.8"
 files = [
@@ -2259,7 +2259,7 @@ test = ["hypothesis (>=5.5.3)", "pytest (>=6.0)", "pytest-xdist (>=1.31)"]
 name = "pandas-gbq"
 version = "0.19.1"
 description = "Google BigQuery connector for pandas"
-category = "main"
+category = "dev"
 optional = false
 python-versions = ">=3.7"
 files = [
@@ -2287,7 +2287,7 @@ tqdm = ["tqdm (>=4.23.0)"]
 name = "parsedatetime"
 version = "2.4"
 description = "Parse human-readable date/time text."
-category = "main"
+category = "dev"
 optional = false
 python-versions = "*"
 files = [
@@ -2419,7 +2419,7 @@ dev = ["autoflake8", "cairosvg", "flake8", "flaky", "ipython", "jinja2", "mike",
 name = "prefect-dbt"
 version = "0.3.1"
 description = "Prefect integration for working with dbt"
-category = "main"
+category = "dev"
 optional = false
 python-versions = ">=3.7"
 files = [
@@ -2468,7 +2468,7 @@ secret-manager = ["google-cloud-secret-manager"]
 name = "prefect-shell"
 version = "0.1.5"
 description = "Prefect tasks and subflows for interacting with shell commands."
-category = "main"
+category = "dev"
 optional = false
 python-versions = ">=3.7"
 files = [
@@ -2486,7 +2486,7 @@ dev = ["black", "coverage", "flake8", "interrogate", "isort", "mkdocs", "mkdocs-
 name = "proto-plus"
 version = "1.22.2"
 description = "Beautiful, Pythonic protocol buffers."
-category = "main"
+category = "dev"
 optional = false
 python-versions = ">=3.6"
 files = [
@@ -2536,7 +2536,7 @@ files = [
 name = "pyarrow"
 version = "11.0.0"
 description = "Python library for Apache Arrow"
-category = "main"
+category = "dev"
 optional = false
 python-versions = ">=3.7"
 files = [
@@ -2678,7 +2678,7 @@ email = ["email-validator (>=1.0.3)"]
 name = "pydata-google-auth"
 version = "1.7.0"
 description = "PyData helpers for authenticating to Google APIs"
-category = "main"
+category = "dev"
 optional = false
 python-versions = "*"
 files = [
@@ -2789,7 +2789,7 @@ six = ">=1.5"
 name = "python-dotenv"
 version = "1.0.0"
 description = "Read key-value pairs from a .env file and set them as environment variables"
-category = "main"
+category = "dev"
 optional = false
 python-versions = ">=3.8"
 files = [
@@ -2822,7 +2822,7 @@ unidecode = ["Unidecode (>=1.1.1)"]
 name = "pytimeparse"
 version = "1.1.8"
 description = "Time expression parser"
-category = "main"
+category = "dev"
 optional = false
 python-versions = "*"
 files = [
@@ -3170,7 +3170,7 @@ testing-integration = ["build[virtualenv]", "filelock (>=3.4.0)", "jaraco.envs (
 name = "sgqlc"
 version = "16.1"
 description = "Simple GraphQL Client"
-category = "main"
+category = "dev"
 optional = false
 python-versions = ">=3.6"
 files = [
@@ -3289,7 +3289,7 @@ sqlcipher = ["sqlcipher3-binary"]
 name = "sqlparse"
 version = "0.4.3"
 description = "A non-validating SQL parser."
-category = "main"
+category = "dev"
 optional = false
 python-versions = ">=3.5"
 files = [
@@ -3319,7 +3319,7 @@ full = ["httpx (>=0.22.0)", "itsdangerous", "jinja2", "python-multipart", "pyyam
 name = "stringcase"
 version = "1.2.0"
 description = "String case converter."
-category = "main"
+category = "dev"
 optional = false
 python-versions = "*"
 files = [
@@ -3563,7 +3563,7 @@ files = [
 name = "werkzeug"
 version = "2.2.3"
 description = "The comprehensive WSGI web application library."
-category = "main"
+category = "dev"
 optional = false
 python-versions = ">=3.7"
 files = [
@@ -3580,4 +3580,4 @@ watchdog = ["watchdog"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.11"
-content-hash = "92cf2808e098a48d9e98a4b1368be183660a331e869277fceefdb34c66e00ea1"
+content-hash = "25e655eeb52e5296c490ce4d7653a38171c849bf21c0b4f0abde1004f2234758"
