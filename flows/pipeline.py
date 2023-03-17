@@ -1,4 +1,5 @@
 import os
+import requests
 
 import pandas as pd
 from dotenv import load_dotenv
@@ -30,9 +31,7 @@ def load(blob):
     dataset_name = os.getenv("GCP_DATASET_NAME")
     dataset_table_name = os.getenv("GCP_DATASET_TABLE_NAME")
 
-    gcp_credentials = GcpCredentials.load(
-        os.getenv("PREFECT_GCP_CREDENTIALS_BLOCK_NAME")
-    )
+    gcp_credentials = GcpCredentials.load(os.getenv("PREFECT_GCP_CREDENTIALS_BLOCK_NAME"))
 
     blob.to_gbq(
         destination_table=f"{dataset_name}.{dataset_table_name}",
@@ -47,25 +46,18 @@ def load(blob):
     log_prints=True,
     task_run_name="extracting:{month}-{year}",
 )
-def extract(month, year):
-    """Extract csv data from source"""
-
-    if len(f"{month}") == 1:
-        month = f"0{month}"
-
-    data_url = f"https://github.com/DataTalksClub/nyc-tlc-data/\
-        releases/download/fhv/fhv_tripdata_{year}-{month}.csv.gz"
-    blob = pd.read_csv(data_url, nrows=100)
+def extract(date_string):
+    request = requests.get(f"https://data.cityofnewyork.us/resource/ic3t-wcy2.json?pre__filing_date={date_string}")
+    blob = pd.read_json(request.text)
     return blob
 
 
 @flow(log_prints=True)
-def main(month=1, year=2019):
+def main(date_string=""):
     """Run all parametrized extraction and loading flows"""
-    blob = extract(month, year)
+    blob = extract(date_string)
     load(blob)
-    transform()
 
 
 if __name__ == "__main__":
-    main(month=1, year=2019)
+    main(date_string="16/03/2023")
