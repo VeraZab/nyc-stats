@@ -64,7 +64,7 @@ def correct_types(df):
 )
 def extract(from_date, to_date):
     request = requests.get(
-        f"https://data.cityofnewyork.us/resource/erm2-nwe9.json?$where=created_date between '{from_date}T00:00:00' and '{to_date}T23:59:59'"
+        f"https://data.cityofnewyork.us/resource/erm2-nwe9.json?$limit=10000000000000000000000000000&$where=created_date between '{from_date}T00:00:00' and '{to_date}T23:59:59'"
     )
 
     df = pd.DataFrame.from_records(request.json())
