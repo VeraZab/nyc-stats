@@ -26,7 +26,6 @@ def transform():
     dbt_op.run()
 
 
-@task(log_prints=True)
 def load(df):
     """Load Data to BigQuery Warehouse"""
 
@@ -38,7 +37,7 @@ def load(df):
         destination_table=f"{dataset_name}.{dataset_table_name}",
         project_id=os.getenv("GCP_PROJECT_ID"),
         credentials=gcp_credentials.get_credentials_from_service_account(),
-        if_exists="replace",
+        if_exists="append",
     )
 
 
@@ -62,20 +61,27 @@ def correct_types(df):
     log_prints=True,
     task_run_name="extracting: from {from_date} (inclusive) to {to_date} (inclusive)",
 )
-def extract(from_date, to_date):
-    some_ridiculous_number_to_bypass_pagination_limit = 9223372036854775807
+def extract_and_load(from_date, to_date):
+    results_per_page = 1000000
+    offset = 0
+
     response = requests.get(
-        f"https://data.cityofnewyork.us/resource/erm2-nwe9.json?&$where=created_date between '{from_date}T00:00:00' and '{to_date}T23:59:59'"
+        f"https://data.cityofnewyork.us/resource/erm2-nwe9.json?&$limit={results_per_page}&$offset={offset}&$where=created_date between '{from_date}T00:00:00' and '{to_date}T23:59:59'"
     )
 
-    df = pd.DataFrame.from_records(response.json())
-    adjusted_df = correct_types(df)
-    return adjusted_df
+    while len(response.json()):
+        offset += results_per_page
+        df = pd.DataFrame.from_records(response.json())
+        adjusted_df = correct_types(df)
+        load(adjusted_df)
+        response = requests.get(
+            f"https://data.cityofnewyork.us/resource/erm2-nwe9.json?&$limit={results_per_page}&$offset={offset}&$where=created_date between '{from_date}T00:00:00' and '{to_date}T23:59:59'"
+        )
 
 
 @flow(log_prints=True)
 def main(from_date, to_date):
-    df = extract(from_date, to_date)
+    df = extract_and_load(from_date, to_date)
     load(df)
 
 
