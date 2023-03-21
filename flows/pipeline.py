@@ -26,6 +26,7 @@ def transform():
     dbt_op.run()
 
 
+@task(name="loading to BigQuery")
 def load(df):
     """Load Data to BigQuery Warehouse"""
 
@@ -41,6 +42,7 @@ def load(df):
     )
 
 
+@task(name="correcting types")
 def correct_types(df):
     df.drop(columns="location", inplace=True)
     df = df.convert_dtypes()
@@ -56,11 +58,7 @@ def correct_types(df):
     return df
 
 
-@task(
-    retries=3,
-    log_prints=True,
-    task_run_name="extracting: from {from_date} (inclusive) to {to_date} (inclusive)",
-)
+@flow(log_prints=True, name="extracting and loading")
 def extract_and_load(from_date, to_date):
     results_per_page = 1000000
     offset = 0
@@ -70,6 +68,7 @@ def extract_and_load(from_date, to_date):
     )
 
     while len(response.json()):
+        print(f"current offset: {offset}")
         offset += results_per_page
         df = pd.DataFrame.from_records(response.json())
         adjusted_df = correct_types(df)
