@@ -81,8 +81,7 @@ def extract_and_load(from_date, to_date):
 
 @flow(log_prints=True)
 def main(from_date, to_date):
-    df = extract_and_load(from_date, to_date)
-    load(df)
+    extract_and_load(from_date, to_date)
 
 
 if __name__ == "__main__":
