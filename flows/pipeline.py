@@ -63,11 +63,12 @@ def correct_types(df):
     task_run_name="extracting: from {from_date} (inclusive) to {to_date} (inclusive)",
 )
 def extract(from_date, to_date):
-    request = requests.get(
-        f"https://data.cityofnewyork.us/resource/erm2-nwe9.json?$limit=10000000000000000000000000000&$where=created_date between '{from_date}T00:00:00' and '{to_date}T23:59:59'"
+    some_ridiculous_number_to_bypass_pagination_limit = 9223372036854775807
+    response = requests.get(
+        f"https://data.cityofnewyork.us/resource/erm2-nwe9.json?&$where=created_date between '{from_date}T00:00:00' and '{to_date}T23:59:59'"
     )
 
-    df = pd.DataFrame.from_records(request.json())
+    df = pd.DataFrame.from_records(response.json())
     adjusted_df = correct_types(df)
     return adjusted_df
 
