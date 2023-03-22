@@ -11,7 +11,7 @@ from prefect_gcp import GcpCredentials
 load_dotenv()
 
 
-@task(log_prints=True)
+@task
 def transform():
     # This path changes dynamically as the block requires an absolute path
     dbt_path = f"{os.getcwd()}/dbt/nyc_stats"
@@ -26,7 +26,7 @@ def transform():
     dbt_op.run()
 
 
-@task(name="loading to BigQuery")
+@task
 def load(df):
     """Load Data to BigQuery Warehouse"""
 
@@ -42,8 +42,9 @@ def load(df):
     )
 
 
-@task(name="correcting types")
-def correct_types(df):
+@task
+def convert_to_df(results):
+    df = pd.DataFrame.from_records(results)
     df.drop(columns="location", inplace=True)
     df = df.convert_dtypes()
 
@@ -58,24 +59,26 @@ def correct_types(df):
     return df
 
 
+@task(task_run_name="extracting from {from_date} (inclusive) to {to_date} (inclusive)")
+def extract(results_per_page, offset, from_date, to_date):
+    response = requests.get(
+        f"https://data.cityofnewyork.us/resource/erm2-nwe9.json?&$limit={results_per_page}&$offset={offset}&$where=created_date between '{from_date}T00:00:00' and '{to_date}T23:59:59'"
+    )
+    return response.json()
+
+
 @flow(log_prints=True, name="extracting and loading")
 def extract_and_load(from_date, to_date):
     results_per_page = 1000000
     offset = 0
+    results = extract(results_per_page, offset, from_date, to_date)
 
-    response = requests.get(
-        f"https://data.cityofnewyork.us/resource/erm2-nwe9.json?&$limit={results_per_page}&$offset={offset}&$where=created_date between '{from_date}T00:00:00' and '{to_date}T23:59:59'"
-    )
-
-    while len(response.json()):
+    while len(results):
         print(f"current offset: {offset}")
         offset += results_per_page
-        df = pd.DataFrame.from_records(response.json())
-        adjusted_df = correct_types(df)
-        load(adjusted_df)
-        response = requests.get(
-            f"https://data.cityofnewyork.us/resource/erm2-nwe9.json?&$limit={results_per_page}&$offset={offset}&$where=created_date between '{from_date}T00:00:00' and '{to_date}T23:59:59'"
-        )
+        df = convert_to_df(results)
+        load(df)
+        results = extract(results_per_page, offset, from_date, to_date, wait_for=[load])
 
 
 @flow(log_prints=True)
