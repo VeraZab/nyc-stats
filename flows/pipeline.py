@@ -48,13 +48,13 @@ def convert_to_df(results):
     df.drop(columns="location", inplace=True)
     df = df.convert_dtypes()
 
-    df["created_date"] = pd.to_datetime(df["created_date"])
-    df["resolution_action_updated_date"] = pd.to_datetime(df["resolution_action_updated_date"])
-    df["closed_date"] = pd.to_datetime(df["closed_date"])
-    df["x_coordinate_state_plane"] = pd.to_numeric(df["x_coordinate_state_plane"])
-    df["y_coordinate_state_plane"] = pd.to_numeric(df["y_coordinate_state_plane"])
-    df["longitude"] = pd.to_numeric(df["longitude"])
-    df["latitude"] = pd.to_numeric(df["latitude"])
+    df["created_date"] = pd.to_datetime(df["created_date"], errors="coerce")
+    df["resolution_action_updated_date"] = pd.to_datetime(df["resolution_action_updated_date"], errors="coerce")
+    df["closed_date"] = pd.to_datetime(df["closed_date"], errors="coerce")
+    df["x_coordinate_state_plane"] = pd.to_numeric(df["x_coordinate_state_plane"], errors="coerce")
+    df["y_coordinate_state_plane"] = pd.to_numeric(df["y_coordinate_state_plane"], errors="coerce")
+    df["longitude"] = pd.to_numeric(df["longitude"], errors="coerce")
+    df["latitude"] = pd.to_numeric(df["latitude"], errors="coerce")
 
     return df
 
