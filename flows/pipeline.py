@@ -59,7 +59,7 @@ def convert_to_df(results):
     return df
 
 
-@task(task_run_name="extracting current offset: {offset}")
+@task(task_run_name="extracting current offset: {offset}", retries=3)
 def extract(results_per_page, offset, from_date, to_date):
     response = requests.get(
         f"https://data.cityofnewyork.us/resource/erm2-nwe9.json?&$limit={results_per_page}&$offset={offset}&$where=created_date between '{from_date}T00:00:00' and '{to_date}T23:59:59'"
@@ -69,7 +69,7 @@ def extract(results_per_page, offset, from_date, to_date):
 
 @flow(log_prints=True, name="extracting and loading")
 def extract_and_load(from_date, to_date):
-    results_per_page = 1000000
+    results_per_page = 100000
     offset = 0
     results = extract(results_per_page, offset, from_date, to_date)
 
