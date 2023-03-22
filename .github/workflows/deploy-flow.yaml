@@ -97,9 +97,9 @@ jobs:
             image="${{ steps.docker-flow-image.outputs.IMAGE_URI }}",
             region="${{ env.GCP_RESOURCE_REGION }}",
             credentials=GcpCredentials.load("${{ env.PREFECT_GCP_CREDENTIALS_BLOCK_NAME }}"),
-            cpu=1,
-            memory=4096,
-            memory_unit="Mi",
+            cpu=8,
+            memory=24,
+            memory_unit="Gi",
             timeout=3600,
           )
 
