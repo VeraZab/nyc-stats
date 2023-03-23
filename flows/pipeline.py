@@ -45,6 +45,8 @@ def load(df):
 @task
 def convert_to_df(results):
     df = pd.DataFrame.from_records(results)
+    if df["location"]:
+        df.drop(columns="location", inplace=True)
     df = df.convert_dtypes()
 
     df["created_date"] = pd.to_datetime(df["created_date"], errors="coerce")
