@@ -45,7 +45,6 @@ def load(df):
 @task
 def convert_to_df(results):
     df = pd.DataFrame.from_records(results)
-    df.drop(columns="location", inplace=True)
     df = df.convert_dtypes()
 
     df["created_date"] = pd.to_datetime(df["created_date"], errors="coerce")
@@ -73,7 +72,7 @@ def extract(results_per_page, offset, from_date, to_date):
 @flow(log_prints=True, name="extracting and loading")
 def extract_and_load(from_date, to_date):
     results_per_page = 10000
-    offset = 0
+    offset = 29000
     results = extract(results_per_page, offset, from_date, to_date)
 
     while len(results):
