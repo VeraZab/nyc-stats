@@ -74,7 +74,7 @@ def extract(results_per_page, offset, from_date, to_date):
 @flow(log_prints=True, name="extracting and loading")
 def extract_and_load(from_date, to_date):
     results_per_page = 10000
-    offset = 29000
+    offset = 0
     results = extract(results_per_page, offset, from_date, to_date)
 
     while len(results):
