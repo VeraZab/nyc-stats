@@ -45,7 +45,7 @@ def load(df):
 @task
 def convert_to_df(results):
     df = pd.DataFrame.from_records(results)
-    if df["location"]:
+    if "location" in df.columns:
         df.drop(columns="location", inplace=True)
     df = df.convert_dtypes()
 
