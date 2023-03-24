@@ -45,20 +45,31 @@ def load(df):
 @task
 def convert_to_df(results):
     df = pd.DataFrame.from_records(results)
-    if "location" in df.columns:
-        df.drop(columns="location", inplace=True)
+
+    remove_cols = ["location"]
+    date_cols = ["created_date", "resolution_action_updated_date", "closed_date", "due_date"]
+    num_cols = [
+        "unique_key",
+        "incident_zip",
+        "x_coordinate_state_plane",
+        "y_coordinate_state_plane",
+        "longitude",
+        "latitude",
+    ]
+
+    for col in remove_cols:
+        if col in df.columns:
+            df.drop(columns=col, inplace=True)
+
     df = df.convert_dtypes()
 
-    df["created_date"] = pd.to_datetime(df["created_date"], errors="coerce")
-    df["resolution_action_updated_date"] = pd.to_datetime(df["resolution_action_updated_date"], errors="coerce")
-    df["closed_date"] = pd.to_datetime(df["closed_date"], errors="coerce")
-    df["due_date"] = pd.to_datetime(df["due_date"], errors="coerce")
-    df["unique_key"] = pd.to_numeric(df["unique_key"], errors="coerce")
-    df["incident_zip"] = pd.to_numeric(df["incident_zip"], errors="coerce")
-    df["x_coordinate_state_plane"] = pd.to_numeric(df["x_coordinate_state_plane"], errors="coerce")
-    df["y_coordinate_state_plane"] = pd.to_numeric(df["y_coordinate_state_plane"], errors="coerce")
-    df["longitude"] = pd.to_numeric(df["longitude"], errors="coerce")
-    df["latitude"] = pd.to_numeric(df["latitude"], errors="coerce")
+    for col in date_cols:
+        if col in df.columns:
+            df[col] = pd.to_datetime(df[col], errors="coerce")
+
+    for col in num_cols:
+        if col in df.columns:
+            df[col] = pd.to_numeric(df[col], errors="coerce")
 
     return df
 
