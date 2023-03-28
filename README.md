@@ -1,122 +1,135 @@
-# Zoomcamp 2023 Final Project
+# NYC 311 Service Requests: from 2010 to 2023
 
-### To reproduce:
-
-1. Clone this repository. Do `rm -rf .git` to remove all the git history. Then `git init` to reinitialize repo. Commit and push the code to your own remote repository. Make note of the url of your repository in env vars.
-1. On GCP: create an account, create billing, create project. Install `gcloud` CLI. Run `gcloud init` to configure your CLI settings. See everything is correct with `gcloud info`. Enter all related env variables into env file and export them. Run `make gcp-setup` to create service account and download api key.
-1. On Prefect Cloud: create an account, a workspace, an api key. Enter all Prefect related env vars into your .env file. Export your env vars, and run `make prefect-api-url`. Enter api url into env vars. Set PREFECT_API_KEY to PREFECT_KEY (needed because of [bug](https://github.com/PrefectHQ/prefect/issues/7797)). Reexport env vars.
-1. Install terraform. Run `terraform init` in terraform directory. Fill all environment variables related to Terraform and export them.
-1.
-1. Install docker and start it. Build the image for the Prefect agent with `docker build -t agent -f ./Dockerfiles/agent.Dockerfile .` Run your docker container with `docker run -e PREFECT_API_URL=$PREFECT_API_URL -e PREFECT_API_KEY=$PREFECT_API_KEY -e PREFECT_AGENT_QUEUE_NAME=$PREFECT_AGENT_QUEUE_NAME -d agent:latest`.
-
-## Prerequisites:
-
-<details>
-<summary>Python 3</summary>
-
-This project was tested with Python 3.11. Use a [Python version manager](https://realpython.com/intro-to-pyenv/) and a [virtual environment](https://realpython.com/python-virtual-environments-a-primer/) to install your dependencies.
-
-</details>
-
-<details>
-<summary>Poetry: Python Dependency Manager </summary>
-
-To install Poetry you can view the [installation instructions here](https://python-poetry.org/docs).
-
-</details>
-
-<details>
-<summary>Google Cloud Platform Account</summary>
-
-Sign up for a free test account [here](https://cloud.google.com/free/), and enable billing.
-
-</details>
-
-<details>
-<summary>Google Cloud CLI</summary>
-
-Installation instruction for `gcloud` [here](https://cloud.google.com/sdk/docs/install-sdk).
-
-</details>
-
-<details>
-<summary>Terraform</summary>
-
-You can view the [installation instructions for Terraform here](https://developer.hashicorp.com/terraform/downloads?ajs_aid=f70c2019-1bdc-45f4-85aa-cdd585d465b4&product_intent=terraform)
-
-</details>
-
-<details>
-<summary>Github Repository that you will push your project to</summary>
-
-Creation steps for a [remote github repository here](https://docs.github.com/en/get-started/quickstart/create-a-repo).
-
-</details>
-
+This project was built over the course of the [2023 Data Engineering Zoomcamp](https://github.com/DataTalksClub/data-engineering-zoomcamp). It's goal was to build a data pipeline that continuously fetches, transforms and loads data into a data warehouse and visualizes key insights from it.
+</br>
 </br>
 
-## To setup for development:
+## What is NYC 311
 
-1. Clone repository </br>
-   `git clone https://github.com/VeraZab/elt-template.git`
-1. Remove git history </br>
-   `rm -rf .git`
-1. Reinitialize git and make your initial commit on `main` branch </br>
-   `git init`</br>
-   `git add .` </br>
-   `git commit -m 'initial commit'` </br>
-1. Rename the `env` file to `.env`
-1. Create a virtual environment `python -m venv venv` and activate it with `source venv/bin/activate`.
-1. Run `gcloud init` and follow instructions to setup your project. </br>
-1. Run `gcloud info` to check that all is configured correctly, you should see that your CLI is configured to use your created project.
-1. Enter your newly created projectID into the `.env` file
-1. Enable google cloud billing.
-1. Enable the `gcloud` services that we'll use (bigquery, compute engine) `gcloud services enable compute.googleapis.com`
-1. Fill out the rest of the environment variables that relate to GCP
-1. Run `make gcp-setup`, this will create a service account with editor permissions, and download a json format api key to the path you specified in `.env` file,
-   make sure to include this file to `.gitignore` so its not version controlled.
-1. Run `set -o allexport && source .env && set +o allexport` to export all variables, as we're going to need some of them for Terraform setup next.
-1. Make sure you have the `GOOGLE_APPLICATION_CREDENTIALS` environment variable set, this should have happened at the GCP setup step, when you exported all your env vars. You can check with `echo $GOOGLE_APPLICATION_CREDENTIALS`.
-1. Go into your terraform directory `cd terraform`
-1. Run `terraform init` to initialize.
-1. Run `terraform plan` to see the changes to be applied.
-1. Run `terraform apply` to deploy your resources. If you need to destroy the changes you can run `terraform destroy`.
-1. Install the dependencies with `poetry install --no-root`. If everything is properly installed `pip list` should list all your installed dependencies into a virtual environment. [Docs here](https://python-poetry.org/docs/basic-usage/#activating-the-virtual-environment)
-1. Make sure your Prefect Cloud is properly setup (see section above), and that your environment variables are exported (`echo $PREFECT_KEY` should show your Prefect API Key, if not set, reexport `set -o allexport && source .env && set +o allexport`).
-1. Go back to the root of your directory, and run `make prefect-api-url` to get your Prefect api url. Uncomment the PREFECT_API_URL env var, and set it to what showed up in your terminal. If you try to run `make prefect-api-url` and the PREFECT_API_URL was exported as empty variable, you will not be able to get your PREFECT_API_URL (seems like a Prefect bug).
-1. Fill out the rest of your environment variables, mainly the block names that you want to give to your Prefect blocks.
-1. Reexport all environment variables with `set -o allexport && source .env && set +o allexport && export PREFECT_API_KEY=$PREFECT_KEY`. Note that reserring PREFECT_API_KEY manually is necessary because of this [bug](https://github.com/PrefectHQ/prefect/issues/7797).
-1. Run `make prefect-blocks`, to create all the thirdparty Prefect blocks.
-1. cd into the dbt folder, and run `dbt init`, follow the prompts. Make sure that what got saved into your `~/.dbt/.profiles.yml` as a location for your project is the same location as what you've set in GCP. Copy over just the `models/staging` folder into the dbt project that you've created, then delete the `template` folder, as well as the `models/examples` folder in your newly created project.
-1. Again, fill out the appropriate environment variables for dbt core, and reexport your variables `set -o allexport && source .env && set +o allexport`.
-1. Push the code to your own remote repository.</br>
+---
 
-   ```
-   git add .
-   git commit -m'describe your commit'
-   git remote add origin url-of-your-git-repo
-   git branch -M main
-   git push -u origin main
-   ```
-
-1. Setup your Github Action Secrets and add `PREFECT_API_KEY` and `PREFECT_API_URL` and the `PREFECT_GITHUB_BLOCK_NAME` to your Action Secrets to setup CI/CD work</br>
-![github action secrets](/utilities/images/github-action-secrets.png)
-</details>
-
+NYC 311 is a 24/7 hotline that provides non-emergency services and information for residents, businesses, and visitors. It enables individuals to file complaints on various issues, ranging from poor road conditions, to various noise complaints, graffiti, poor air quality and many others. 311 reroutes service requests to one of the 23 city agencies that is most appropriate to handle them. This service is accessible through multiple channels, including phone, online web portal, mobile app, and social media, offering a centralized point of contact for all non-urgent matters in the city.
+</br>
 </br>
 
-## To run the pipeline:
+## About the dataset
 
-1. [Trigger a workflow run from the Github UI](https://levelup.gitconnected.com/how-to-manually-trigger-a-github-actions-workflow-4712542f1960). This will create and apply a deployment, which you should be able to see in your Prefect Cloud UI.
-1. Trigger a deployment run from Prefect UI.
-1. In a new terminal window run `prefect agent start --pool default-agent-pool --work-queue github`. Make sure your `PREFECT_API_KEY` and `PREFECT_API_URL` environment variables are properly set.
-1. Once that succeeds you should be able to see a new view in your BigQuery table, with just 10 rows from fhv taxi dataset.
+---
 
+[The data](https://data.cityofnewyork.us/Social-Services/311-Service-Requests-from-2010-to-Present/erm2-nwe9) has been taken from the [NYC Open Data portal](https://opendata.cityofnewyork.us/), a publicly accessible platform that provides [an api](https://dev.socrata.com/foundry/data.cityofnewyork.us/erm2-nwe9) and free access to over 2,100 datasets pertinent to the city of NYC. The 311 dataset is updated automatically, daily.
+</br>
 </br>
 
-## To do:
+## Questions that this project seeks to answer
 
-- Use Prefect Orion
-- Make a startup.sh script to reduce startup steps
-- Experiment with Docker and running all this in a container
-- Make prefect agent run on CloudRun, and use Artifact Registry for the Docker Image that will run Prefect Agent
+---
+
+- What are the top complaint types received by NYC 311?
+- What are the top complaint types handled by a specific agency?
+- How have individual complaint types evolved over 13 years (increased/decreased)?
+- Which zip codes file the most complaints?
+- Which zip codes report a particular type of complaint most often?
+- Which agencies handle the most 311 complaints and how has this changed year over year?
+- Has the responsiveness of the various city agencies increased or decreased year over year?
+  </br>
+  </br>
+
+## What technologies have been used in this project
+
+---
+
+![Project Architecture Diagram](/utilities/images/architecture-diagram.png)
+
+- [Pandas Python Library](https://pandas.pydata.org/): To fetch data from the [Socrata api](https://dev.socrata.com/foundry/data.cityofnewyork.us/erm2-nwe9), transform it into a dataframe with appropriate data types, and load it to BigQuery
+- [Docker](https://www.docker.com/): To containerize our code and get the flows ready for deployment on CloudRun and Compute Engine
+- [Terraform](https://www.terraform.io/): To easily manage infrastructure setup and changes
+- [Compute Engine](https://cloud.google.com/compute): To host the Prefect Agent and continuously listen to any queued up jobs in Prefect
+- [Cloud Run Jobs](https://cloud.google.com/run/docs/create-jobs): To execute our Prefect flows in a serverless execution environment
+- [Artifact Registry](https://cloud.google.com/artifact-registry): To host our Docker images for the Prefect Agent and Prefect Flows
+- [Github](https://github.com/): To host our source code as well as for CI/CD with Github Actions
+- [Google BigQuery](https://cloud.google.com/bigquery): To host our data from the NYC Open Data api
+- [Prefect OSS and Prefect Cloud](https://www.prefect.io/): To orchestrate, monitor and schedule our deployments
+- [DBT](https://www.getdbt.com/): To transform the data in our data warehouse and get it ready for visualization
+- [Google Looker Studio](https://lookerstudio.google.com/): To make our dashboard
+  </br>
+  </br>
+
+## Structure of the Complaint Facts Table
+
+---
+
+| Column         | Data Type | Description                                  |
+| -------------- | --------- | -------------------------------------------- |
+| unique_key     | INTEGER   | Unique key identifying a specific complaint  |
+| created_date   | TIMESTAMP | Date the complaint was filled                |
+| closed_date    | TIMESTAMP | Date the complaint was closed                |
+| agency_name    | STRING    | Full name of agency that handled the request |
+| complaint_type | STRING    | A category of complaint                      |
+| descriptor     | STRING    | Longer description explaining complaint      |
+| incident_zip   | INTEGER   | Zip Code where incident occured              |
+
+</br>
+</br>
+
+## DBT Lineage Graph
+
+---
+
+The lineage graph for the final Complaints Fact Table looks like this:
+![Lineage](/utilities/images/lineage-graph.png)
+
+</br>
+</br>
+
+`agencies` is a table that was created from a seed csv which contained abbreviations and full names of all the agencies that deal with 311 Service Requests.
+</br>
+</br>
+The `staging.my_table` table is poorly named and I was aprehensive of changing this name as I had already loaded up a few gigabytes of data into it after realizing the poor naming. The name should have been `complaints` as this is effectively what this table represents. `stg_my_table` cleaned up and standardized the data from the `staging.my_table` table and applied a filter to it that removed around 2M records that were made for complaints outside of NYC Zip Codes.
+</br>
+</br>
+`stg_my_table` and `dim_agency_names` have been joined so as to provide the full agency name in the final `fct_complaints` table that feeds our dashboard.
+</br>
+</br>
+The `fct_complaints` table which feeds our dashboard, has been partitioned by month (as partitioning daily would have exceeded the max 4000 partition limit of BigQuery). It has also been clustered by `complaint_type` and `agency_name` columns.
+
+</br>
+</br>
+
+## Dashboard Preview
+
+---
+
+![Dashboard Page 1](/utilities/images/dashboard1.png)
+![Dashboard Page 2](/utilities/images/dashboard2.png)
+![Dashboard Page 3](/utilities/images/dashboard3.png)
+</br>
+</br>
+
+## Key Findings
+
+---
+
+- About a third of the 311 Service Requests filled are routed to the The New York City Police Department. It's the agency that deals with the most requests.
+- The top 5 service requests to the NYPD are: Residential Noise, Illegal Parking, Blocked Driveway, Noise on Street/Sidewalk, Commercial Noise.
+- Residential Noise complaints from 2019 to 2020 have spiked drastically (230k complaints in 2019 to 403k in 2020), and haven't really decreased in 2021, 2022.
+- The noisiest part of town is in the Bronx, specifically in zip code 10466. [It's even been written about](https://www.nycitynewsservice.com/2020/12/03/noise-complaints-nyc-bronx-pandemic-house-parties/).
+- The NYPD receives more complaints than any other agency, but it hasn't always been the case. Before 2015, the Department of Housing Preservation and Development used to be the agency dealing with the most complaints.
+- Top complaints with the Department of Housing Preservation and Development include: Heat/Hot Water related complaints, Heating, Plumbing, Unsanitary Conditions, General Construction.
+- Even if the NYPD receives such important amounts of requests (1.3M in 2022), it is pretty fast at responding to them. The average response time is less than a day.
+  </br>
+  </br>
+
+## To Replicate
+
+---
+
+To replicate this pipeline please follow instructions in [here](./to_reproduce.md).
+</br>
+</br>
+
+## Future Improvements
+
+---
+
+- would love to add testing as well as a development, staging, production environments
+- would love to add testing to Continuous Integration
