@@ -6,23 +6,17 @@ This project was built over the course of the [2023 Data Engineering Zoomcamp](h
 
 ## What is NYC 311
 
----
-
 NYC 311 is a 24/7 hotline that provides non-emergency services and information for residents, businesses, and visitors. It enables individuals to file complaints on various issues, ranging from poor road conditions, to various noise complaints, graffiti, poor air quality and many others. 311 reroutes service requests to one of the 23 city agencies that is most appropriate to handle them. This service is accessible through multiple channels, including phone, online web portal, mobile app, and social media, offering a centralized point of contact for all non-urgent matters in the city.
 </br>
 </br>
 
 ## About the dataset
 
----
-
 [The data](https://data.cityofnewyork.us/Social-Services/311-Service-Requests-from-2010-to-Present/erm2-nwe9) has been taken from the [NYC Open Data portal](https://opendata.cityofnewyork.us/), a publicly accessible platform that provides [an api](https://dev.socrata.com/foundry/data.cityofnewyork.us/erm2-nwe9) and free access to over 2,100 datasets pertinent to the city of NYC. The 311 dataset is updated automatically, daily.
 </br>
 </br>
 
 ## Questions that this project seeks to answer
-
----
 
 - What are the top complaint types received by NYC 311?
 - What are the top complaint types handled by a specific agency?
@@ -35,8 +29,6 @@ NYC 311 is a 24/7 hotline that provides non-emergency services and information f
   </br>
 
 ## What technologies have been used in this project
-
----
 
 ![Project Architecture Diagram](/utilities/images/architecture-diagram.png)
 
@@ -56,8 +48,6 @@ NYC 311 is a 24/7 hotline that provides non-emergency services and information f
 
 ## Structure of the Complaint Facts Table
 
----
-
 | Column         | Data Type | Description                                  |
 | -------------- | --------- | -------------------------------------------- |
 | unique_key     | INTEGER   | Unique key identifying a specific complaint  |
@@ -72,8 +62,6 @@ NYC 311 is a 24/7 hotline that provides non-emergency services and information f
 </br>
 
 ## DBT Lineage Graph
-
----
 
 The lineage graph for the final Complaints Fact Table looks like this:
 ![Lineage](/utilities/images/lineage-graph.png)
@@ -97,8 +85,6 @@ The `fct_complaints` table which feeds our dashboard, has been partitioned by mo
 
 ## Dashboard Preview
 
----
-
 ![Dashboard Page 1](/utilities/images/dashboard1.png)
 ![Dashboard Page 2](/utilities/images/dashboard2.png)
 ![Dashboard Page 3](/utilities/images/dashboard3.png)
@@ -106,8 +92,6 @@ The `fct_complaints` table which feeds our dashboard, has been partitioned by mo
 </br>
 
 ## Key Findings
-
----
 
 - About a third of the 311 Service Requests filled are routed to the The New York City Police Department. It's the agency that deals with the most requests.
 - The top 5 service requests to the NYPD are: Residential Noise, Illegal Parking, Blocked Driveway, Noise on Street/Sidewalk, Commercial Noise.
@@ -121,15 +105,11 @@ The `fct_complaints` table which feeds our dashboard, has been partitioned by mo
 
 ## To Replicate
 
----
-
 To replicate this pipeline please follow instructions in [here](./to_reproduce.md).
 </br>
 </br>
 
 ## Future Improvements
-
----
 
 - would love to add testing as well as a development, staging, production environments
 - would love to add testing to Continuous Integration
