@@ -22,8 +22,3 @@ target-path: "target" # directory which will store compiled SQL files
 clean-targets: # directories to be removed by `dbt clean`
   - "target"
   - "dbt_packages"
-
-# Configuring models
-# Full documentation: https://docs.getdbt.com/docs/configuring-models
-models:
-  nyc_stats:
