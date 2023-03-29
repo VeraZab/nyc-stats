@@ -13,7 +13,8 @@ load_dotenv()
 
 @task
 def transform():
-    # This path changes dynamically as the block requires an absolute path
+    """Run the dbt transformations on our BigQuery table"""
+
     dbt_path = f"{os.getcwd()}/dbt/nyc_stats"
 
     dbt_op = DbtCoreOperation(
@@ -28,13 +29,11 @@ def transform():
 
 @task
 def load(df):
-    """Load Data to BigQuery Warehouse"""
+    """Loading Data to BigQuery Warehouse"""
 
     dataset_name = os.getenv("GCP_DATASET_NAME")
     dataset_table_name = os.getenv("GCP_DATASET_TABLE_NAME")
-    gcp_credentials = GcpCredentials.load(
-        os.getenv("PREFECT_GCP_CREDENTIALS_BLOCK_NAME")
-    )
+    gcp_credentials = GcpCredentials.load(os.getenv("PREFECT_GCP_CREDENTIALS_BLOCK_NAME"))
 
     df.to_gbq(
         destination_table=f"{dataset_name}.{dataset_table_name}",
@@ -46,6 +45,8 @@ def load(df):
 
 @task
 def convert_to_df(results):
+    """Converting json results from api into a Pandas dataframe."""
+
     df = pd.DataFrame.from_records(results)
 
     remove_cols = ["location"]
@@ -87,14 +88,22 @@ def convert_to_df(results):
     retry_delay_seconds=60,
 )
 def extract(results_per_page, offset, from_date, to_date):
+    """Extracting Data from API"""
+
     response = requests.get(
-        f"https://data.cityofnewyork.us/resource/erm2-nwe9.json?$limit={results_per_page}&$offset={offset}&$where=created_date between '{from_date}T00:00:00' and '{to_date}T23:59:59'&$order=created_date ASC"
+        f"https://data.cityofnewyork.us/resource/erm2-nwe9.json?\
+            $limit={results_per_page}&$offset={offset}\
+                &$where=created_date between '{from_date}T00:00:00' and \
+                    '{to_date}T23:59:59'&$order=created_date ASC"
     )
+
     return response.json()
 
 
 @flow(log_prints=True, name="extracting and loading")
 def extract_and_load(from_date, to_date):
+    """Extracts and Loads data to BigQuery given a time range"""
+
     results_per_page = 10000
     offset = 0
     results = extract(results_per_page, offset, from_date, to_date)
@@ -103,14 +112,15 @@ def extract_and_load(from_date, to_date):
         offset += results_per_page
         df = convert_to_df(results)
         load(df)
-        results = extract(
-            results_per_page, offset, from_date, to_date, wait_for=[load]
-        )
+        results = extract(results_per_page, offset, from_date, to_date, wait_for=[load])
 
 
 @flow(log_prints=True)
 def main(from_date, to_date):
+    """Our main Prefect flow"""
+
     extract_and_load(from_date, to_date)
+    transform()
 
 
 if __name__ == "__main__":
