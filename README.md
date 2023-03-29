@@ -1,6 +1,7 @@
 # NYC 311 Service Requests: from 2010 to 2023
 
-This project was built over the course of the [2023 Data Engineering Zoomcamp](https://github.com/DataTalksClub/data-engineering-zoomcamp). It's goal was to build a data pipeline that continuously fetches, transforms and loads data into a data warehouse and visualizes key insights from it.
+This project was built over the course of the [2023 Data Engineering Zoomcamp](https://github.com/DataTalksClub/data-engineering-zoomcamp). It's goal was to build a data pipeline that continuously fetched, transformed and loaded data into a data warehouse and visualized key insights from it. This is a batch data pipeline, it was written in a way that allows for ad hoc data loading as well as daily job runs that fetch the latest data from the [api](<(https://dev.socrata.com/foundry/data.cityofnewyork.us/erm2-nwe9)>). </br></br>
+I also documented my entire 2023 Data Engineering Zoomcamp journey in my medium posts [here](https://medium.com/@verazabeida/zoomcamp-2023-week-1-f4f94cb360ae).
 </br>
 </br>
 
@@ -10,13 +11,13 @@ NYC 311 is a 24/7 hotline that provides non-emergency services and information f
 </br>
 </br>
 
-## About the dataset
+## About the Dataset
 
-[The data](https://data.cityofnewyork.us/Social-Services/311-Service-Requests-from-2010-to-Present/erm2-nwe9) has been taken from the [NYC Open Data portal](https://opendata.cityofnewyork.us/), a publicly accessible platform that provides [an api](https://dev.socrata.com/foundry/data.cityofnewyork.us/erm2-nwe9) and free access to over 2,100 datasets pertinent to the city of NYC. The 311 dataset is updated automatically, daily.
+[The data](https://data.cityofnewyork.us/Social-Services/311-Service-Requests-from-2010-to-Present/erm2-nwe9) has been taken from the [NYC Open Data portal](https://opendata.cityofnewyork.us/), a publicly accessible platform that provides [an api](https://dev.socrata.com/foundry/data.cityofnewyork.us/erm2-nwe9) and free access to over 2,100 datasets related to the city of NYC. The 311 dataset is updated automatically, daily.
 </br>
 </br>
 
-## Questions that this project seeks to answer
+## Questions this Project Seeks to Answer
 
 - What are the top complaint types received by NYC 311?
 - What are the top complaint types handled by a specific agency?
@@ -28,25 +29,26 @@ NYC 311 is a 24/7 hotline that provides non-emergency services and information f
   </br>
   </br>
 
-## What technologies have been used in this project
+## Technologies Used
 
 ![Project Architecture Diagram](/utilities/images/architecture-diagram.png)
 
 - [Pandas Python Library](https://pandas.pydata.org/): To fetch data from the [Socrata api](https://dev.socrata.com/foundry/data.cityofnewyork.us/erm2-nwe9), transform it into a dataframe with appropriate data types, and load it to BigQuery
-- [Docker](https://www.docker.com/): To containerize our code and get the flows ready for deployment on CloudRun and Compute Engine
 - [Terraform](https://www.terraform.io/): To easily manage infrastructure setup and changes
+- [Docker](https://www.docker.com/): To containerize our code and get the flows ready for deployment on CloudRun and prefect agent ready to run on Compute Engine
+- [Artifact Registry](https://cloud.google.com/artifact-registry): To host our Docker images for the Prefect Agent and Prefect Flows
 - [Compute Engine](https://cloud.google.com/compute): To host the Prefect Agent and continuously listen to any queued up jobs in Prefect
 - [Cloud Run Jobs](https://cloud.google.com/run/docs/create-jobs): To execute our Prefect flows in a serverless execution environment
-- [Artifact Registry](https://cloud.google.com/artifact-registry): To host our Docker images for the Prefect Agent and Prefect Flows
-- [Github](https://github.com/): To host our source code as well as for CI/CD with Github Actions
 - [Google BigQuery](https://cloud.google.com/bigquery): To host our data from the NYC Open Data api
+- [Google Looker Studio](https://lookerstudio.google.com/): To make our dashboard
+- [Github](https://github.com/): To host our source code as well as for CI/CD with Github Actions
 - [Prefect OSS and Prefect Cloud](https://www.prefect.io/): To orchestrate, monitor and schedule our deployments
 - [DBT](https://www.getdbt.com/): To transform the data in our data warehouse and get it ready for visualization
-- [Google Looker Studio](https://lookerstudio.google.com/): To make our dashboard
+
   </br>
   </br>
 
-## Structure of the Complaint Facts Table
+## Structure of the Final Complaints Fact Table
 
 | Column         | Data Type | Description                                  |
 | -------------- | --------- | -------------------------------------------- |
@@ -85,6 +87,8 @@ The `fct_complaints` table which feeds our dashboard, has been partitioned by mo
 
 ## Dashboard Preview
 
+You can explore the final dashboard [here](https://lookerstudio.google.com/u/0/reporting/65ee32b0-4626-4a39-8065-5d8c27380a1a/page/XHJKD).
+
 ![Dashboard Page 1](/utilities/images/dashboard1.png)
 ![Dashboard Page 2](/utilities/images/dashboard2.png)
 ![Dashboard Page 3](/utilities/images/dashboard3.png)
@@ -105,11 +109,16 @@ The `fct_complaints` table which feeds our dashboard, has been partitioned by mo
 
 ## To Replicate
 
-To replicate this pipeline please follow instructions in [here](./to_reproduce.md).
+1. Go through the prerequisite steps [here](./prerequisites.md). The last step in those prerequisites will make you push your code to your own remote repository, which will create a Docker Image for your Prefect Flows, push it to GCP Artifact Registry, and register a Prefect CloudRunJob block to use this new image for your flow runs.
+1. Trigger a Prefect Deployment build by activating the `Build and Apply Prefect Deployment` github action on the Github UI.
+1. Once your Prefect Deployment is applied, go to Prefect Cloud, check that your Agent is running (ie: the work queue is healthy).
+1. Trigger a deployment by doing a quick run or custom run on the Prefect Cloud UI.
+
 </br>
 </br>
 
 ## Future Improvements
 
-- would love to add testing as well as a development, staging, production environments
-- would love to add testing to Continuous Integration
+- would love to add testing and set it up with Continuous Integration
+- would love to add support for different environments (development, staging, production)
+- would like to see if there's a possibility to add other data sources to enhance this analysis
