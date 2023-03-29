@@ -1,5 +1,6 @@
 import os
 from datetime import date, timedelta
+from typing import List
 
 import pandas as pd
 import requests
@@ -12,7 +13,7 @@ load_dotenv()
 
 
 @task
-def transform():
+def transform() -> None:
     """Run the dbt transformations on our BigQuery table"""
 
     dbt_path = f"{os.getcwd()}/dbt/nyc_stats"
@@ -28,12 +29,14 @@ def transform():
 
 
 @task
-def load(df):
+def load(df: pd.DataFrame) -> None:
     """Loading Data to BigQuery Warehouse"""
 
     dataset_name = os.getenv("GCP_DATASET_NAME")
     dataset_table_name = os.getenv("GCP_DATASET_TABLE_NAME")
-    gcp_credentials = GcpCredentials.load(os.getenv("PREFECT_GCP_CREDENTIALS_BLOCK_NAME"))
+    gcp_credentials = GcpCredentials.load(
+        os.getenv("PREFECT_GCP_CREDENTIALS_BLOCK_NAME")
+    )
 
     df.to_gbq(
         destination_table=f"{dataset_name}.{dataset_table_name}",
@@ -44,7 +47,7 @@ def load(df):
 
 
 @task
-def convert_to_df(results):
+def convert_to_df(results: List[dict]) -> pd.DataFrame:
     """Converting json results from api into a Pandas dataframe."""
 
     df = pd.DataFrame.from_records(results)
@@ -87,7 +90,9 @@ def convert_to_df(results):
     retries=3,
     retry_delay_seconds=60,
 )
-def extract(results_per_page, offset, from_date, to_date):
+def extract(
+    results_per_page: int, offset: int, from_date: date, to_date: date
+) -> List[dict]:
     """Extracting Data from API"""
 
     response = requests.get(
@@ -101,7 +106,7 @@ def extract(results_per_page, offset, from_date, to_date):
 
 
 @flow(log_prints=True, name="extracting and loading")
-def extract_and_load(from_date, to_date):
+def extract_and_load(from_date: date, to_date: date) -> None:
     """Extracts and Loads data to BigQuery given a time range"""
 
     results_per_page = 10000
@@ -112,11 +117,13 @@ def extract_and_load(from_date, to_date):
         offset += results_per_page
         df = convert_to_df(results)
         load(df)
-        results = extract(results_per_page, offset, from_date, to_date, wait_for=[load])
+        results = extract(
+            results_per_page, offset, from_date, to_date, wait_for=[load]
+        )
 
 
 @flow(log_prints=True)
-def main(from_date, to_date):
+def main(from_date: date, to_date: date) -> None:
     """Our main Prefect flow"""
 
     extract_and_load(from_date, to_date)
