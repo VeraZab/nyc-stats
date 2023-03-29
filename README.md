@@ -1,7 +1,7 @@
 # NYC 311 Service Requests: from 2010 to 2023
 
 This project was built over the course of the [2023 Data Engineering Zoomcamp](https://github.com/DataTalksClub/data-engineering-zoomcamp). It's goal was to build a data pipeline that continuously fetched, transformed and loaded data into a data warehouse and visualized key insights from it. This is a batch data pipeline, it was written in a way that allows for ad hoc data loading as well as daily job runs that fetch the latest data from the [api](<(https://dev.socrata.com/foundry/data.cityofnewyork.us/erm2-nwe9)>). </br></br>
-I also documented my entire 2023 Data Engineering Zoomcamp journey in my medium posts [here](https://medium.com/@verazabeida/zoomcamp-2023-week-1-f4f94cb360ae).
+I also documented my entire 2023 Data Engineering Zoomcamp journey in my medium posts [here](https://medium.com/@verazabeida/list/2023-data-engineering-zoomcamp-dfa7bb438f44).
 </br>
 </br>
 
