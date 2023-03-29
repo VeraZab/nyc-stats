@@ -87,7 +87,7 @@ The `fct_complaints` table which feeds our dashboard, has been partitioned by mo
 
 ## Dashboard Preview
 
-You can explore the final dashboard [here](https://lookerstudio.google.com/u/0/reporting/65ee32b0-4626-4a39-8065-5d8c27380a1a/page/XHJKD).
+You can explore the final dashboard [here](https://lookerstudio.google.com/reporting/65ee32b0-4626-4a39-8065-5d8c27380a1a).
 
 ![Dashboard Page 1](/utilities/images/dashboard1.png)
 ![Dashboard Page 2](/utilities/images/dashboard2.png)
