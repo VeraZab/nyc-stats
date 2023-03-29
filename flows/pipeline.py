@@ -32,7 +32,9 @@ def load(df):
 
     dataset_name = os.getenv("GCP_DATASET_NAME")
     dataset_table_name = os.getenv("GCP_DATASET_TABLE_NAME")
-    gcp_credentials = GcpCredentials.load(os.getenv("PREFECT_GCP_CREDENTIALS_BLOCK_NAME"))
+    gcp_credentials = GcpCredentials.load(
+        os.getenv("PREFECT_GCP_CREDENTIALS_BLOCK_NAME")
+    )
 
     df.to_gbq(
         destination_table=f"{dataset_name}.{dataset_table_name}",
@@ -47,7 +49,12 @@ def convert_to_df(results):
     df = pd.DataFrame.from_records(results)
 
     remove_cols = ["location"]
-    date_cols = ["created_date", "resolution_action_updated_date", "closed_date", "due_date"]
+    date_cols = [
+        "created_date",
+        "resolution_action_updated_date",
+        "closed_date",
+        "due_date",
+    ]
     num_cols = [
         "unique_key",
         "incident_zip",
@@ -74,7 +81,11 @@ def convert_to_df(results):
     return df
 
 
-@task(task_run_name="extracting current offset: {offset}", retries=3, retry_delay_seconds=60)
+@task(
+    task_run_name="extracting current offset: {offset}",
+    retries=3,
+    retry_delay_seconds=60,
+)
 def extract(results_per_page, offset, from_date, to_date):
     response = requests.get(
         f"https://data.cityofnewyork.us/resource/erm2-nwe9.json?$limit={results_per_page}&$offset={offset}&$where=created_date between '{from_date}T00:00:00' and '{to_date}T23:59:59'&$order=created_date ASC"
@@ -92,7 +103,9 @@ def extract_and_load(from_date, to_date):
         offset += results_per_page
         df = convert_to_df(results)
         load(df)
-        results = extract(results_per_page, offset, from_date, to_date, wait_for=[load])
+        results = extract(
+            results_per_page, offset, from_date, to_date, wait_for=[load]
+        )
 
 
 @flow(log_prints=True)
