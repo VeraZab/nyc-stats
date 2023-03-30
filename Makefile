@@ -54,4 +54,4 @@ enable-apis:
 		artifactregistry.googleapis.com
 
 gcp-setup:
-	make enable-apis && service-account && make service-account-permissions && make download-api-key
+	make enable-apis && make service-account && make service-account-permissions && make download-api-key

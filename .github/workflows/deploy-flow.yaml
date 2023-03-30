@@ -6,11 +6,9 @@ env:
   PREFECT_GCP_CREDENTIALS_BLOCK_NAME: ${{ secrets.PREFECT_GCP_CREDENTIALS_BLOCK_NAME }}
   GCP_RESOURCE_REGION: ${{ secrets.GCP_RESOURCE_REGION }}
   GCP_PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
-  GCP_ARTIFACT_REPOSITORY_NAME: ${{ secrets.GCP_ARTIFACT_REPOSITORY_NAME }}
   GCP_SERVICE_ACCOUNT_API_KEY_BASE64: ${{ secrets.GCP_SERVICE_ACCOUNT_API_KEY_BASE64 }}
   GCP_DATASET_NAME: ${{ secrets.GCP_DATASET_NAME }}
   GCP_DATASET_TABLE_NAME: ${{ secrets.GCP_DATASET_TABLE_NAME }}
-  FLOW_IMAGE_NAME: ${{ secrets.FLOW_IMAGE_NAME }}
 
 on:
   push:
@@ -54,8 +52,8 @@ jobs:
       - name: Build and push image to GAR
         id: docker-flow-image
         run: |
-          RAW_IMAGE=$GCP_RESOURCE_REGION-docker.pkg.dev/$GCP_PROJECT/$GCP_ARTIFACT_REPOSITORY_NAME/$FLOW_IMAGE_NAME
-          IMAGE_URI=$GCP_RESOURCE_REGION-docker.pkg.dev/$GCP_PROJECT/$GCP_ARTIFACT_REPOSITORY_NAME/$FLOW_IMAGE_NAME:$GITHUB_SHA
+          RAW_IMAGE=$GCP_RESOURCE_REGION-docker.pkg.dev/$GCP_PROJECT/nyc-stats/flows
+          IMAGE_URI=$GCP_RESOURCE_REGION-docker.pkg.dev/$GCP_PROJECT/nyc-stats/flows:$GITHUB_SHA
           docker build -q \
           --build-arg PREFECT_API_KEY=$PREFECT_API_KEY \
           --build-arg PREFECT_API_URL=$PREFECT_API_URL \

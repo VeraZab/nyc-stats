@@ -100,7 +100,7 @@ You can explore the final dashboard [here](https://lookerstudio.google.com/repor
 - About a third of the 311 Service Requests filled are routed to the The New York City Police Department. It's the agency that deals with the most requests.
 - The top 5 service requests to the NYPD are: Residential Noise, Illegal Parking, Blocked Driveway, Noise on Street/Sidewalk, Commercial Noise.
 - Residential Noise complaints from 2019 to 2020 have spiked drastically (230k complaints in 2019 to 403k in 2020), and haven't really decreased in 2021, 2022.
-- The noisiest part of town is in the Bronx, specifically in zip code 10466. [It's even been written about](https://www.nycitynewsservice.com/2020/12/03/noise-complaints-nyc-bronx-pandemic-house-parties/).
+- The part of town reporting the most noise complaints is in the Bronx, specifically in zip code 10466. [It's even been written about](https://www.nycitynewsservice.com/2020/12/03/noise-complaints-nyc-bronx-pandemic-house-parties/).
 - The NYPD receives more complaints than any other agency, but it hasn't always been the case. Before 2015, the Department of Housing Preservation and Development used to be the agency dealing with the most complaints.
 - Top complaints with the Department of Housing Preservation and Development include: Heat/Hot Water related complaints, Heating, Plumbing, Unsanitary Conditions, General Construction.
 - Even if the NYPD receives such important amounts of requests (1.3M in 2022), it is pretty fast at responding to them. The average response time is less than a day.

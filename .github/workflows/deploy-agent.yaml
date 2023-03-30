@@ -7,8 +7,6 @@ env:
   GCP_RESOURCE_REGION: ${{ secrets.GCP_RESOURCE_REGION }}
   GCP_COMPUTE_ENGINE_REGION: ${{ secrets.GCP_COMPUTE_ENGINE_REGION }}
   GCP_PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
-  GCP_ARTIFACT_REPOSITORY_NAME: ${{ secrets.GCP_ARTIFACT_REPOSITORY_NAME }}
-  AGENT_IMAGE_NAME: ${{ secrets.AGENT_IMAGE_NAME }}
   GCP_COMPUTE_ENGINE_NAME: ${{ secrets.GCP_COMPUTE_ENGINE_NAME }}
   GCP_SERVICE_ACCOUNT_EMAIL: ${{ secrets.GCP_SERVICE_ACCOUNT_EMAIL }}
   GCP_SERVICE_ACCOUNT_API_KEY: ${{ secrets.GCP_SERVICE_ACCOUNT_API_KEY }}
@@ -53,8 +51,8 @@ jobs:
       - name: Build and push image to GAR
         id: docker-agent-image
         run: |
-          RAW_IMAGE=$GCP_RESOURCE_REGION-docker.pkg.dev/$GCP_PROJECT/$GCP_ARTIFACT_REPOSITORY_NAME/$AGENT_IMAGE_NAME
-          IMAGE_URI=$GCP_RESOURCE_REGION-docker.pkg.dev/$GCP_PROJECT/$GCP_ARTIFACT_REPOSITORY_NAME/$AGENT_IMAGE_NAME:$GITHUB_SHA
+          RAW_IMAGE=$GCP_RESOURCE_REGION-docker.pkg.dev/$GCP_PROJECT/nyc-stats/agent
+          IMAGE_URI=$GCP_RESOURCE_REGION-docker.pkg.dev/$GCP_PROJECT/nyc-stats/agent:$GITHUB_SHA
 
           docker build -q --build-arg PREFECT_API_KEY=$PREFECT_API_KEY \
             --build-arg PREFECT_API_URL=$PREFECT_API_URL \
