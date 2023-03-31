@@ -112,6 +112,7 @@ You can explore the final dashboard [here](https://lookerstudio.google.com/repor
 1. Go through the prerequisite steps [here](./prerequisites.md). The last step in those prerequisites will make you push your code to your own remote repository, which will create a Docker Image for your Prefect Flows, push it to GCP Artifact Registry, and register a Prefect CloudRunJob block to use this new image for your flow runs.
 1. Trigger a Prefect Deployment build by activating the `Build and Apply Prefect Deployment` github action on the Github UI.
 1. Once your Prefect Deployment is applied, go to Prefect Cloud, check that your Agent is running (ie: the work queue is healthy).
+1. You can also retrigger a Prefect Agent deployment with the "Rebuild Agent VM" from the GitHub Actions UI. (The first VM deployment has been made with terraform when creating all our resources.)
 1. Trigger a deployment by doing a quick run or custom run on the Prefect Cloud UI.
 
 </br>
