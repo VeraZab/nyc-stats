@@ -26,12 +26,11 @@ NYC 311 is a 24/7 hotline that provides non-emergency services and information f
 - Which zip codes report a particular type of complaint most often?
 - Which agencies handle the most 311 complaints and how has this changed year over year?
 - Has the responsiveness of the various city agencies increased or decreased year over year?
-  </br>
-  </br>
 
-## Technologies Used
+</br>
+</br>
 
-![Project Architecture Diagram](/utilities/images/architecture-diagram.png)
+## Tech Stack Used
 
 - [Pandas Python Library](https://pandas.pydata.org/): To fetch data from the [Socrata api](https://dev.socrata.com/foundry/data.cityofnewyork.us/erm2-nwe9), transform it into a dataframe with appropriate data types, and load it to BigQuery
 - [Terraform](https://www.terraform.io/): To easily manage infrastructure setup and changes
@@ -45,8 +44,31 @@ NYC 311 is a 24/7 hotline that provides non-emergency services and information f
 - [Prefect OSS and Prefect Cloud](https://www.prefect.io/): To orchestrate, monitor and schedule our deployments
 - [DBT](https://www.getdbt.com/): To transform the data in our data warehouse and get it ready for visualization
 
-  </br>
-  </br>
+</br>
+</br>
+
+## Data Pipeline Architecture
+
+![Project Architecture Diagram](/utilities/images/architecture-diagram.png)
+
+- This pipeline is setup to use CI/CD through Github Actions. Every time code is pushed to the main branch, a new Docker `flows` image is built and pushed to Artifact Registry, and a new CloudRunJob Prefect block is created (or overwritten) with a link to that updated image.
+
+- Once the infrastructure to run our flows is properly configured (the CloudRunJob), a new Prefect Deployment can be built and applied specifying the remote code storage to use (Github repository) along with the infrastructure to use (the above CloudRunJob).
+
+- A manually triggered Github Action was created to build and apply Prefect Deployments as this action only needs to be triggered the very first time, or when any of the arguments for the Prefect Deployment change (ex: `--name`, `--work-queue`, `--storage-block`, `--infra-block` ). To trigger this manual Github Action just trigger the "Build and Apply Prefect Deployment" Github Action from the Github UI.
+
+- Terraform is used to setup all of our remaining GCP resources (BigQuery, Compute Engine, IAM Service Account, Artifact Registry).
+
+- The Prefect agent is run on Compute Engine. When we apply our infrastructure via Terraform, a Compute Engine instance is created for our Prefect Agent, and a startup script provided in our Terraform setup, gets it up and running.
+
+- If any changes related to the Prefect agent are needed subsequently (ex: we changed the project's Python version, or the Prefect version we're using), we can trigger a manual rebuild of our Compute Engine instance with the "Rebuild Agent VM" Github Action. This action will build and push an updated `agent` image to Artifact Registry and then use that image to re-initialize a new Compute Engine instance with it.
+
+- A successful flow run fetches the latest data from our api, loads it to BigQuery, runs dbt transformations on our loaded up data and creates the needed tables that feed our final Looker Dashboard.
+
+- When viewing our Looker dashboard, we can make sure all the latest data is included by clicking the "Refresh Data" button.
+
+</br>
+</br>
 
 ## Structure of the Final Complaints Fact Table
 
@@ -113,7 +135,7 @@ You can explore the final dashboard [here](https://lookerstudio.google.com/repor
 1. Trigger a Prefect Deployment build by activating the `Build and Apply Prefect Deployment` github action on the Github UI.
 1. Once your Prefect Deployment is applied, go to Prefect Cloud, check that your Agent is running (ie: the work queue is healthy).
 1. You can also retrigger a Prefect Agent deployment with the "Rebuild Agent VM" from the GitHub Actions UI. (The first VM deployment has been made with terraform when creating all our resources.)
-1. Trigger a deployment by doing a quick run or custom run on the Prefect Cloud UI.
+1. Trigger a deployment by doing a quick run or custom run on the Prefect Cloud UI. Don't make your time period too long as your job can timeout, [read more about this here](https://medium.com/@verazabeida/zoomcamp-2023-project-week-4-5-6e9b5192c3dc).
 
 </br>
 </br>
