@@ -1,6 +1,5 @@
 import os
 from datetime import date, timedelta
-from typing import List
 
 import pandas as pd
 import requests
@@ -47,7 +46,7 @@ def load(df: pd.DataFrame) -> None:
 
 
 @task
-def convert_to_df(results: List[dict]) -> pd.DataFrame:
+def convert_to_df(results: list[dict]) -> pd.DataFrame:
     """Converting json results from api into a Pandas dataframe."""
 
     df = pd.DataFrame.from_records(results)
@@ -92,11 +91,14 @@ def convert_to_df(results: List[dict]) -> pd.DataFrame:
 )
 def extract(
     results_per_page: int, offset: int, from_date: date, to_date: date
-) -> List[dict]:
+) -> list[dict]:
     """Extracting Data from API"""
 
     response = requests.get(
-        f"https://data.cityofnewyork.us/resource/erm2-nwe9.json?$limit={results_per_page}&$offset={offset}&$where=created_date between '{from_date}T00:00:00' and '{to_date}T23:59:59'&$order=created_date ASC"
+        f"https://data.cityofnewyork.us/resource/erm2-nwe9.json?"
+        f"$limit={results_per_page}&$offset={offset}"
+        f"&$where=created_date between '{from_date}T00:00:00' and"
+        f" '{to_date}T23:59:59'&$order=created_date ASC"
     )
 
     return response.json()
