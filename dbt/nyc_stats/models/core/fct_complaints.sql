@@ -11,13 +11,13 @@ WITH dim_agencies AS (
     SELECT
         *
     FROM
-        {{ ref('dim_agency_names') }}
+        {{ ref('agencies') }}
 ),
 complaints AS (
     SELECT
         *
     FROM
-        {{ ref('stg_my_table') }}
+        {{ ref('stg_complaints') }}
 )
 SELECT
     complaints.unique_key,

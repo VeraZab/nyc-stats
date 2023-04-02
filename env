@@ -7,7 +7,7 @@ GCP_SERVICE_ACCOUNT_NAME= # desired name for your service account
 # if you change the filename to something else than gcp-credentials.json then change this in .gitignore
 LOCAL_SERVICE_ACCOUNT_FILE_PATH={your-absolute-path}/gcp-credentials.json
 GCP_RESOURCE_REGION= # desired region for your resources
-GCP_DATASET_NAME= # desired name for your bigquery warehouse
+GCP_DATASET_NAME=nyc311 # desired name for your bigquery warehouse
 GCP_DATASET_TABLE_NAME=complaints
 GCP_COMPUTE_ENGINE_NAME=prefect-agent-vm
 GCP_COMPUTE_ENGINE_MACHINE_TYPE=e2-micro

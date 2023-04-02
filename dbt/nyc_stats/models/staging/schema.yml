@@ -2,7 +2,7 @@ version: 2
 
 sources:
   - name: staging
-    database:
-    schema: my_warehouse
+    database: nyc311
+    schema:
     tables:
-      - name: my_table
+      - name: complaints

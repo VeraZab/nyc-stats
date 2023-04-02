@@ -100,6 +100,7 @@ Creation steps for a [remote github repository here](https://docs.github.com/en/
 
    </br>
 
+1. In the `dbt/nyc_stats/models`, make sure that the `schema.yml` file matches up with your BigQuery setup. Also in `stg_complaints.sql`, make sure that the `source` reference matches up the name of your BigQuery table. Also check that all the references to db and tables in the `core` folder are ok.
 1. Push the code to your own remote repository. This will automatically (with the help of Github Actions), create a Docker image and push it to Artifact Registry, so that your flows can use that infrastructure when running. It will also create a CloudRunJob block in Prefect Cloud. </br>
 
    ```

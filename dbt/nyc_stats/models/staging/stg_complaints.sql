@@ -11,7 +11,7 @@ SELECT
 FROM
     {{ source(
         'staging',
-        'my_table'
+        'complaints'
     ) }}
 WHERE
     incident_zip BETWEEN 10001

@@ -96,10 +96,10 @@ The lineage graph for the final Complaints Fact Table looks like this:
 `agencies` is a table that was created from a seed csv which contained abbreviations and full names of all the agencies that deal with 311 Service Requests.
 </br>
 </br>
-The `staging.my_table` table is poorly named and I was aprehensive of changing this name as I had already loaded up a few gigabytes of data into it after realizing the poor naming. The name should have been `complaints` as this is effectively what this table represents. `stg_my_table` cleaned up and standardized the data from the `staging.my_table` table and applied a filter to it that removed around 2M records that were made for complaints outside of NYC Zip Codes.
+The `staging.complaints` table is where we've loaded up all the source data from the Socrata api. `stg_complaints` is a view that cleans up and standardizes the data from the `staging.complaints` table. It also applies a filter that removes around 2M records made for complaints outside of NYC Zip Codes.
 </br>
 </br>
-`stg_my_table` and `dim_agency_names` have been joined so as to provide the full agency name in the final `fct_complaints` table that feeds our dashboard.
+The `stg_complaints` view and `agencies` table have been joined so as to provide the full agency name in the final `fct_complaints` table that feeds our dashboard.
 </br>
 </br>
 The `fct_complaints` table which feeds our dashboard, has been partitioned by month (as partitioning daily would have exceeded the max 4000 partition limit of BigQuery). It has also been clustered by `complaint_type` and `agency_name` columns.
