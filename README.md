@@ -3,18 +3,15 @@
 This project was built over the course of the [2023 Data Engineering Zoomcamp](https://github.com/DataTalksClub/data-engineering-zoomcamp). It's goal was to build a data pipeline that continuously fetched, transformed and loaded data into a data warehouse and visualized key insights from it. This is a batch data pipeline, it was written in a way that allows for ad hoc data loading as well as daily job runs that fetch the latest data from the [api](<(https://dev.socrata.com/foundry/data.cityofnewyork.us/erm2-nwe9)>). </br></br>
 I also documented my entire 2023 Data Engineering Zoomcamp journey in my medium posts [here](https://medium.com/@verazabeida/list/2023-data-engineering-zoomcamp-dfa7bb438f44).
 </br>
-</br>
 
 ## What is NYC 311
 
 NYC 311 is a 24/7 hotline that provides non-emergency services and information for residents, businesses, and visitors. It enables individuals to file complaints on various issues, ranging from poor road conditions, to various noise complaints, graffiti, poor air quality and many others. 311 reroutes service requests to one of the 23 city agencies that is most appropriate to handle them. This service is accessible through multiple channels, including phone, online web portal, mobile app, and social media, offering a centralized point of contact for all non-urgent matters in the city.
 </br>
-</br>
 
 ## About the Dataset
 
 [The data](https://data.cityofnewyork.us/Social-Services/311-Service-Requests-from-2010-to-Present/erm2-nwe9) has been taken from the [NYC Open Data portal](https://opendata.cityofnewyork.us/), a publicly accessible platform that provides [an api](https://dev.socrata.com/foundry/data.cityofnewyork.us/erm2-nwe9) and free access to over 2,100 datasets related to the city of NYC. The 311 dataset is updated automatically, daily.
-</br>
 </br>
 
 ## Questions this Project Seeks to Answer
@@ -27,7 +24,6 @@ NYC 311 is a 24/7 hotline that provides non-emergency services and information f
 - Which agencies handle the most 311 complaints and how has this changed year over year?
 - Has the responsiveness of the various city agencies increased or decreased year over year?
 
-</br>
 </br>
 
 ## Tech Stack
@@ -44,7 +40,6 @@ NYC 311 is a 24/7 hotline that provides non-emergency services and information f
 - [Prefect OSS and Prefect Cloud](https://www.prefect.io/): To orchestrate, monitor and schedule our deployments
 - [DBT Core](https://www.getdbt.com/): To transform the data in our data warehouse and get it ready for visualization
 
-</br>
 </br>
 
 ## Data Pipeline Architecture
@@ -66,7 +61,6 @@ NYC 311 is a 24/7 hotline that provides non-emergency services and information f
 - When viewing our Looker dashboard, we can make sure all the latest data is included by clicking the "Refresh Data" button.
 
 </br>
-</br>
 
 ## Structure of the Final Complaints Fact Table
 
@@ -81,14 +75,12 @@ NYC 311 is a 24/7 hotline that provides non-emergency services and information f
 | incident_zip   | INTEGER   | Zip Code where incident occured              |
 
 </br>
-</br>
 
 ## DBT Lineage Graph
 
 The lineage graph for the final Fact Complaints Table looks like this:
 ![Lineage](/utilities/images/lineage-graph.png)
 
-</br>
 </br>
 
 - The `staging.complaints` table is where we've loaded up all the source data from the Socrata api.
@@ -102,7 +94,6 @@ The lineage graph for the final Fact Complaints Table looks like this:
 - The `fct_complaints` table which feeds our dashboard, has been partitioned by month (as partitioning daily would have exceeded the max 4000 partition limit of BigQuery). It has also been clustered by `complaint_type` and `agency_name` columns.
 
 </br>
-</br>
 
 ## Dashboard Preview
 
@@ -111,7 +102,6 @@ You can explore the final dashboard [here](https://lookerstudio.google.com/repor
 ![Dashboard Page 1](/utilities/images/dashboard1.png)
 ![Dashboard Page 2](/utilities/images/dashboard2.png)
 ![Dashboard Page 3](/utilities/images/dashboard3.png)
-</br>
 </br>
 
 ## Key Findings
@@ -123,8 +113,8 @@ You can explore the final dashboard [here](https://lookerstudio.google.com/repor
 - The NYPD receives more complaints than any other agency, but it hasn't always been the case. Before 2015, the Department of Housing Preservation and Development used to be the agency dealing with the most complaints.
 - Top complaints with the Department of Housing Preservation and Development include: Heat/Hot Water related complaints, Heating, Plumbing, Unsanitary Conditions, General Construction.
 - Even if the NYPD receives such important amounts of requests (1.3M in 2022), it is pretty fast at responding to them. The average response time is less than a day.
-  </br>
-  </br>
+
+</br>
 
 ## To Replicate
 
@@ -134,7 +124,6 @@ You can explore the final dashboard [here](https://lookerstudio.google.com/repor
 1. You can also retrigger a Prefect Agent deployment with the "Rebuild Agent VM" from the GitHub Actions UI. (The first VM deployment has been made with terraform when creating all our resources.)
 1. Trigger a deployment by doing a quick run or custom run on the Prefect Cloud UI. Don't make your time period too long as your job can timeout, [read more about this here](https://medium.com/@verazabeida/zoomcamp-2023-project-week-4-5-6e9b5192c3dc).
 
-</br>
 </br>
 
 ## Future Improvements
